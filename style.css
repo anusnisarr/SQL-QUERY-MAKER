@@ -1,0 +1,232 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #121212;
+    color: #E0E0E0;
+    display: flex;
+    /* flex-direction: column ; */
+    justify-content:center ;
+    align-items: center;
+    min-height:100vh;
+    /* margin: 0; */
+    /* margin-top: calc(100vh - 50%); */
+    overflow: auto;
+}
+
+/* Container Styling */
+.container {
+    margin-top: 5vh;
+    overflow: hidden;
+    background-color: #1F1F1F;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+    /* height:max-content; */
+    min-height: 250px;
+    width: 40vw;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.container:hover {
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.boxheading{
+    width: 100%;
+    display: flex;
+    height: 8px;
+    font-size: 9px;
+    color: #BB86FC;
+    margin-bottom: 0.5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    gap: 12px;
+}
+
+#topinputheading {
+    width: 100%;
+    display: flex;
+    height: 8px;
+    font-size: 9px;
+    color: #BB86FC;
+    /* margin-bottom: 0.5px; */
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    gap: 12px;
+}
+
+#topinputheading h2{
+    width: 50%;
+    /* padding-left: 10px; */
+}
+
+.boxheading h2 {
+    width: 50%;
+    /* padding-left: 10px; */
+}
+
+.textarea {
+    display: flex;
+    gap: 10px;
+}
+
+/* Textarea Styling */
+textarea{
+    width: 100%;
+    height: 250px;
+    padding: 10px;
+    background-color: #2C2C2C;
+    border: 2px solid #333;
+    border-radius: 8px;
+    color: #E0E0E0;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 15px;
+    margin-bottom: 15px;
+    resize: none;
+    outline: none;
+    transition: border-color 0.3s;
+
+}
+#accoundCodep{
+    width: 100%;
+    height: 250px;
+    padding: 10px;
+    background-color: #2C2C2C;
+    border: 2px solid #333;
+    border-radius: 8px;
+    color: #9a9a9a;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 10px;
+    margin-bottom: 15px;
+    resize: none;
+    outline: none;
+    transition: border-color 0.3s;
+}
+textarea:focus {
+    border-color: #BB86FC;
+}
+
+/* Form Input and Select Styling */
+.inputFeild {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.tableandbranch{
+    display: flex;
+    gap: 12px;
+}
+#selectQuery {
+    margin-bottom: 15px;
+    color: #d0d0d0;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 12px;
+    background-color: #2C2C2C;
+    border: 2px solid #333;
+    border-radius: 8px;
+    color: #E0E0E0;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s;
+
+}
+
+input[type="text"]:focus,select:focus {
+    border-color: #BB86FC;
+}
+
+/* Submit Button Styling */
+input[type="submit"] {
+    background-color: #b57df9;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+input[type="submit"]:hover {
+    background-color: #9c4dfcc6;
+    transform: translateX(-1px)
+}
+
+/* Output Styling */
+.output{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 18px;
+    color: #BB86FC;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.noofrows{
+    display: flex;
+    justify-content: end;
+    color: #c8c7c7;
+    font-size: 13px;
+    margin-bottom:5px;
+    margin-right: 3px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+#copyBtn {
+    background-color: #BB86FC; /* Green */
+    color: white;
+    border: none;
+    /* padding: 6px 8px; */
+    font-size: 11px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+
+
+}
+
+#copyBtn:hover {
+    background-color: #9c4dfcc6; /* Darker green on hover */
+}
+
+#copyBtn:active {
+    background-color: #000000d7; /* Even darker when clicked */
+}
+
+
+
+.result {
+    background-color: #2C2C2C;
+    padding: 15px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    /* font-size: 14px; */
+    /* min-height: 60px; */
+    color: #E0E0E0;
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+}
+
+/* Responsive Design */
+@media (max-width: 500px) {
+    .container {
+        width: 100%;
+        padding: 20px;
+    }
+}
