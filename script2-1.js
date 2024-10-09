@@ -240,25 +240,47 @@ function customerInsertQuery() {
     }
 
     // Output validation and displaying the query
-    if (names.value === "" && address.value === "") {
-        output.textContent = "Please Paste Data!";
-    } else if (names.value !== "" && address.value === "") {
-        output.textContent = "Please Paste Address!";
-    } else if (names.value === "" && address.value !== "") {
+    if (names.value === "" && address.value === "" && phone.value === "") {
+        output.textContent = "Please Paste Name, Address, and Phone!";
+    } else if (names.value === "" && address.value !== "" && phone.value === "") {
+        output.textContent = "Please Paste Name and Phone!";
+    } else if (names.value === "" && address.value === "" && phone.value !== "") {
+        output.textContent = "Please Paste Name and Address!";
+    } else if (names.value === "" && address.value !== "" && phone.value !== "") {
         output.textContent = "Please Paste Name!";
-        // Handle case where the number of barcodes and sale rates do not match
-    } else if (nameArray.length !== addressArray.length) {
-        output.textContent = "The number of Names and Address do not match!";
+    } else if (names.value !== "" && address.value === "" && phone.value === "") {
+        output.textContent = "Please Paste Address and Phone!";
+    } else if (names.value !== "" && address.value === "" && phone.value !== "") {
+        output.textContent = "Please Paste Address!";
+    } else if (names.value !== "" && address.value !== "" && phone.value === "") {
+        output.textContent = "Please Paste Phone!";
+    } else if (nameArray.length !== addressArray.length || nameArray.length !== phoneArray.length) {
+        output.textContent = "The number of Names, Address, and Phone numbers do not match!";
     } else {
         output.textContent = finalQuery; // Display the generated SQL queries
     }
+    
 
     // Clipboard Button validation and displaying
-    if (output.innerHTML === "" || output.textContent === "Please Paste Data!"
-        || output.textContent === "Please Paste Sale Rate!" || output.textContent === "Please Paste Barcode!" ||
-        output.textContent === "The number of Barcodes and Sale Rates do not match!") {
+    if (output.innerHTML === "" || 
+        output.textContent === "Please Paste Data!" || 
+        output.textContent === "Please Paste Name, Address, and Phone!" || 
+        output.textContent === "Please Paste Name!" || 
+        output.textContent === "Please Paste Address!" || 
+        output.textContent === "Please Paste Phone!" || 
+        output.textContent === "Please Paste Name and Phone!" || 
+        output.textContent === "Please Paste Name and Address!" || 
+        output.textContent === "Please Paste Address and Phone!" || 
+        output.textContent === "The number of Names, Address, and Phone numbers do not match!") {
+    
+            showBtn.textContent = ""; // Clear the button text  
+            copyBtn.textContent = ""; // Clear the button text
+            showBtn.style.padding = "0"; // Hide the button by removing padding
+            copyBtn.style.padding = "0"; // Hide the button by removing padding.
+            numberofrows.textContent = ""; // Clear the number of rows count
 
     }
+    
     else {
         copyBtn.textContent = "Copy to clipboard";
         copyBtn.style.padding = "6px 8px";
@@ -298,7 +320,9 @@ const copyToClip = () => {
 
 
 function resetCopyButton() {
+    showBtn.textContent = ""; // Clear the button text  
     copyBtn.textContent = ""; // Clear the button text
+    showBtn.style.padding = "0"; // Hide the button by removing padding
     copyBtn.style.padding = "0"; // Hide the button by removing padding
     output.textContent = ""; // Clear the output content
     numberofrows.textContent = ""; // Clear the number of rows count
