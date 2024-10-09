@@ -9,10 +9,12 @@ let quoteBarcode = "";
 let updateInactiveBtn = document.querySelector("#selectQuery");
 let boxHeading = document.querySelector(".boxheading");
 let textarea = document.querySelector(".textarea");
-let copyBtn = document.querySelector("#copyBtn");
+let copyBtn = document.getElementById("copyBtn");
+let showBtn = document.getElementById("showBtn");
 let numberofrows = document.querySelector(".noofrows");
 let numberQuery = 0;
-
+let finalCOAQuery = "";
+let finalQuery = "";
 submitbtn.addEventListener("click", function () {
     if (updateInactiveBtn.value === "update-SaleRate") {
         SalerateUpdateQuery();
@@ -20,7 +22,7 @@ submitbtn.addEventListener("click", function () {
     else if (updateInactiveBtn.value === "insertCustomer") {
         customerInsertQuery();
     }
-    else if (updateInactiveBtn.value === "update-SKU"){
+    else if (updateInactiveBtn.value === "update-SKU") {
         skuUpdateQuery()
     }
 });
@@ -85,11 +87,11 @@ function SalerateUpdateQuery() {
     });
 
     // Join all the queries with a newline character for output
-    let finalQuery = formattedQueries.join("\n");
+    finalQuery = formattedQueries.join("\n");
 
     for (let i = 1; i <= formattedQueries.length; i++) {
         numberQuery = i;
-        numberofrows.textContent = "NO OF ROWS: " + numberQuery;
+        numberofrows.textContent = "ROWS:"+ numberQuery;
     }
 
     // Output validation and displaying the query
@@ -112,7 +114,7 @@ function SalerateUpdateQuery() {
     }
 
     else {
-        copyBtn.textContent = "Copy to Clipboard";
+        copyBtn.textContent = "Copy to clipboard";
         copyBtn.style.padding = "6px 8px";
     };
 };
@@ -145,11 +147,11 @@ function skuUpdateQuery() {
     });
 
     // Join all the queries with a newline character for output
-    let finalQuery = formattedQueries.join("\n");
+    finalQuery = formattedQueries.join("\n");
 
     for (let i = 1; i <= formattedQueries.length; i++) {
         numberQuery = i;
-        numberofrows.textContent = "NO OF ROWS: " + numberQuery;
+        numberofrows.textContent = "ROWS:" + numberQuery;
     }
 
     // Output validation and displaying the query
@@ -172,7 +174,7 @@ function skuUpdateQuery() {
     }
 
     else {
-        copyBtn.textContent = "Copy to Clipboard";
+        copyBtn.textContent = "Copy to clipboard";
         copyBtn.style.padding = "6px 8px";
     };
 };
@@ -219,13 +221,22 @@ function customerInsertQuery() {
     });
     console.log(accountnumber);
 
-    // Join all the queries with a newline character for output
-    let finalQuery = formattedQueries.join("\n");
 
+    let formattedQueriesCOA = nameArray.map((name, index) => {
+        return `INSERT INTO chart_of_accounts ( BranchCode, HeadCode, AccountCode, Account, ChequeName, CurrencyCode, CurrencyCurrentRate, Amount, OpeningAmount, Type, AccountType, FSFNote, InActive, Status, GUID, RecordNo, DiscountAccount) 
+        VALUES( '${branchCode.value}', '01-002-004', '01-002-004-${(accountnumber + index).toString().padStart(4, '0')}', '${nameArray[index]}', '', 'NULL', '0.00', '0', '0.00', 'H', 'Assets', 0, 1, '1', 0,0,0);`
+    });
+
+    // Join all the queries with a newline character for output
+    finalQuery = formattedQueries.join("\n");
+
+    // Join all the queries with a newline character for output
+    finalCOAQuery = formattedQueriesCOA.join("\n");
+    console.log(finalCOAQuery);
     //SHOW COUNT OF NO OF ROWS
     for (let i = 1; i <= formattedQueries.length; i++) {
         numberQuery = i;
-        numberofrows.textContent = "NO OF ROWS: " + numberQuery;
+        numberofrows.textContent = "ROWS:" + numberQuery;
     }
 
     // Output validation and displaying the query
@@ -249,9 +260,29 @@ function customerInsertQuery() {
 
     }
     else {
-        copyBtn.textContent = "Copy to Clipboard";
+        copyBtn.textContent = "Copy to clipboard";
         copyBtn.style.padding = "6px 8px";
+        showBtn.textContent = "Show COA";
+        showBtn.style.padding = "6px 8px";
     }
+};
+let showStatus = 0;
+const showButton = () => {
+    let toggle = true;  // Flag to track which query to display
+
+    showBtn.addEventListener("click", function () {
+        if (toggle) {
+            showBtn.innerHTML = "Show Customer Query";
+            output.textContent = finalCOAQuery;  // Show COA query
+        } else {
+            showBtn.innerHTML = "Show COA Query";
+            output.textContent = finalQuery;  // Show Final query
+        }
+        toggle = !toggle;  // Toggle the flag on each click
+        copyBtn.innerHTML = "Copy to clipboard";
+        copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
+        copyBtn.style.transition = "background-color  0.3s ease";
+    });
 };
 
 const copyToClip = () => {
@@ -260,33 +291,19 @@ const copyToClip = () => {
             navigator.clipboard.writeText(output.innerHTML).then(() => {
                 copyBtn.innerHTML = "Copied to clipboard!";
                 copyBtn.style.backgroundColor = "#45a049";
-
-                // Set interval for every second to run some functionality
-                let intervalId = setInterval(() => {
-                    console.log("Running interval...");
-                }, 1000); // Runs every 1 second
-
-                // After 5 seconds, stop the interval and reset the button text
-                setTimeout(() => {
-                    clearInterval(intervalId); // Stop the interval after 5 seconds
-                    copyBtn.innerHTML = "Copy to clipboard";
-                    copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
-                    copyBtn.style.transition = "background-color  0.3s ease";
-                }, 3000); // 5000ms = 5 seconds
-
             });
         };
     });
 };
 
+
 function resetCopyButton() {
     copyBtn.textContent = ""; // Clear the button text
     copyBtn.style.padding = "0"; // Hide the button by removing padding
-    // copyBtn.style.display = "none"; // Optionally hide the button completely
-
     output.textContent = ""; // Clear the output content
     numberofrows.textContent = ""; // Clear the number of rows count
 }
 updateInactiveBtn.addEventListener("input", resetCopyButton);
 
 copyToClip();
+showButton();

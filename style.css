@@ -170,24 +170,20 @@ input[type="submit"]:hover {
 .output{
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
+    align-items: baseline;
+    margin-top: 7px;
     font-size: 18px;
     color: #BB86FC;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 .noofrows{
-    display: flex;
-    justify-content: end;
     color: #c8c7c7;
     font-size: 13px;
-    margin-bottom:5px;
-    margin-right: 3px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Courier New', Courier, monospace;
 }
-#copyBtn {
+.copyBtn {
     background-color: #BB86FC; /* Green */
     color: white;
     border: none;
@@ -199,12 +195,16 @@ input[type="submit"]:hover {
 
 
 }
+#showBtn{
+    display: flex;
+    align-self: flex-end;
+}
 
-#copyBtn:hover {
+.copyBtn:hover {
     background-color: #9c4dfcc6; /* Darker green on hover */
 }
 
-#copyBtn:active {
+.copyBtn:active {
     background-color: #000000d7; /* Even darker when clicked */
 }
 
