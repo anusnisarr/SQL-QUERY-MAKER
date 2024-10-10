@@ -11,9 +11,9 @@ body {
     color: #E0E0E0;
     display: flex;
     /* flex-direction: column ; */
-    justify-content:center ;
+    justify-content: center;
     align-items: center;
-    min-height:100vh;
+    min-height: 100vh;
     /* margin: 0; */
     /* margin-top: calc(100vh - 50%); */
     overflow: auto;
@@ -40,7 +40,7 @@ body {
     box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.5);
 }
 
-.boxheading{
+.boxheading {
     width: 100%;
     display: flex;
     height: 8px;
@@ -64,7 +64,7 @@ body {
     gap: 12px;
 }
 
-#topinputheading h2{
+#topinputheading h2 {
     width: 50%;
     /* padding-left: 10px; */
 }
@@ -80,7 +80,7 @@ body {
 }
 
 /* Textarea Styling */
-textarea{
+textarea {
     width: 100%;
     height: 250px;
     padding: 10px;
@@ -96,7 +96,8 @@ textarea{
     transition: border-color 0.3s;
 
 }
-#accoundCodep{
+
+#accoundCodep {
     width: 100%;
     height: 250px;
     padding: 10px;
@@ -111,6 +112,7 @@ textarea{
     outline: none;
     transition: border-color 0.3s;
 }
+
 textarea:focus {
     border-color: #BB86FC;
 }
@@ -122,10 +124,12 @@ textarea:focus {
     gap: 12px;
     margin-bottom: 20px;
 }
-.tableandbranch{
+
+.tableandbranch {
     display: flex;
     gap: 12px;
 }
+
 #selectQuery {
     margin-bottom: 15px;
     color: #d0d0d0;
@@ -145,7 +149,8 @@ select {
 
 }
 
-input[type="text"]:focus,select:focus {
+input[type="text"]:focus,
+select:focus {
     border-color: #BB86FC;
 }
 
@@ -167,7 +172,7 @@ input[type="submit"]:hover {
 }
 
 /* Output Styling */
-.output{
+.output {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
@@ -178,13 +183,16 @@ input[type="submit"]:hover {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
-.noofrows{
+
+.noofrows {
     color: #c8c7c7;
     font-size: 13px;
     font-family: 'Courier New', Courier, monospace;
 }
+
 .copyBtn {
-    background-color: #BB86FC; /* Green */
+    background-color: #BB86FC;
+    /* Green */
     color: white;
     border: none;
     /* padding: 6px 8px; */
@@ -195,17 +203,20 @@ input[type="submit"]:hover {
 
 
 }
-#showBtn{
+
+#showBtn {
     display: flex;
     align-self: flex-end;
 }
 
 .copyBtn:hover {
-    background-color: #9c4dfcc6; /* Darker green on hover */
+    background-color: #9c4dfcc6;
+    /* Darker green on hover */
 }
 
 .copyBtn:active {
-    background-color: #000000d7; /* Even darker when clicked */
+    background-color: #000000d7;
+    /* Even darker when clicked */
 }
 
 

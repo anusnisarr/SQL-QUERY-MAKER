@@ -15,6 +15,8 @@ let numberofrows = document.querySelector(".noofrows");
 let numberQuery = 0;
 let finalCOAQuery = "";
 let finalQuery = "";
+let currentDate = new Date();
+
 submitbtn.addEventListener("click", function () {
     if (updateInactiveBtn.value === "update-SaleRate") {
         SalerateUpdateQuery();
@@ -91,7 +93,7 @@ function SalerateUpdateQuery() {
 
     for (let i = 1; i <= formattedQueries.length; i++) {
         numberQuery = i;
-        numberofrows.textContent = "ROWS:"+ numberQuery;
+        numberofrows.textContent = "ROWS:" + numberQuery;
     }
 
     // Output validation and displaying the query
@@ -186,18 +188,18 @@ function customerInsertQuery() {
     let nameArray = names.value.split(/\n/).map(barcode => barcode.trim()); // Split and trim barcodes
 
     let address = document.querySelector(".addressBox");
-    let addressArray = address.value.split(/\n/).map(rate => rate.trim()); // Split and trim sale rates
+    let addressArray = address.value.split(/\n/).map(addr => addr.trim().replace(/'/g, '')); // Split and trim sale rates
 
     let phone = document.querySelector(".phoneBox");
-    let phoneArray = phone.value.split(/\n/).map(rate => rate.trim()); // Split and trim phone
+    let phoneArray = phone.value.split(/\n/).map(mobile => mobile.trim().replace(/'/g, '')); // Split and trim phone
+
     let accountdigit = document.querySelector("#AccountCode").value;
     let accountnumber = Number(accountdigit);
-    console.log(accountdigit)
 
     // Ensure that empty lines are filtered out
     nameArray = nameArray.filter(name => name !== "");
-    addressArray = addressArray.filter(address => address !== "");
-    phoneArray = phoneArray.filter(phone => phone !== "");
+    // addressArray = addressArray.filter(address => address !== "");
+    // phoneArray = phoneArray.filter(phone => phone !== "");
 
 
     // Ensure tableName is provided
@@ -217,10 +219,9 @@ function customerInsertQuery() {
     // Create separate 'UPDATE' queries for each customer pair
     let formattedQueries = nameArray.map((name, index) => {
         return `INSERT INTO ${tableName.value} (BranchCode, CustomerCode, Customer, Address, AreaCode, CityCode, PhoneNo, FaxNo, MobileNo, EmailID, GUID, RecordNo, created_at, updated_at, AreaId, DOB, gender, customer_category, AccountCode)
-        VALUES ('${branchCode.value}','01-002-004-${(accountnumber + index).toString().padStart(4, '0')}', '${nameArray[index]}', '${addressArray[index]}', '', '', '${phoneArray[index]}', '', '${phoneArray[index]}', '', 0, 0, '2021-08-26 11:30:00', '2021-08-26 11:30:00', '0', '0000-00-00 00:00:00', '', '', '01-002-004-${(accountnumber + index).toString().padStart(4, '0')}');`;
+        VALUES ('${branchCode.value}','0101-${(accountnumber + index).toString().padStart(2, '0')}-0202', '${nameArray[index]}', '${addressArray[index]}', '', '', '${phoneArray[index]}', '', '${phoneArray[index]}', '', 0, 0, '${currentDate.toISOString().split('T')[0]} 00:00:00', '${currentDate.toISOString().split('T')[0]} 00:00:00', '0', '0000-00-00 00:00:00', '', '', '01-002-004-${(accountnumber + index).toString().padStart(4, '0')}');`;
     });
-    console.log(accountnumber);
-
+    console.log(formattedQueries)
 
     let formattedQueriesCOA = nameArray.map((name, index) => {
         return `INSERT INTO chart_of_accounts ( BranchCode, HeadCode, AccountCode, Account, ChequeName, CurrencyCode, CurrencyCurrentRate, Amount, OpeningAmount, Type, AccountType, FSFNote, InActive, Status, GUID, RecordNo, DiscountAccount) 
@@ -232,7 +233,6 @@ function customerInsertQuery() {
 
     // Join all the queries with a newline character for output
     finalCOAQuery = formattedQueriesCOA.join("\n");
-    console.log(finalCOAQuery);
     //SHOW COUNT OF NO OF ROWS
     for (let i = 1; i <= formattedQueries.length; i++) {
         numberQuery = i;
@@ -254,33 +254,38 @@ function customerInsertQuery() {
         output.textContent = "Please Paste Address!";
     } else if (names.value !== "" && address.value !== "" && phone.value === "") {
         output.textContent = "Please Paste Phone!";
-    } else if (nameArray.length !== addressArray.length || nameArray.length !== phoneArray.length) {
-        output.textContent = "The number of Names, Address, and Phone numbers do not match!";
-    } else {
+    } else if (nameArray.length !== addressArray.length && nameArray.length !== phoneArray.length){
+        output.textContent = "The No of Address and Phone do not match with Names";
+    } else if (nameArray.length == phoneArray.length && nameArray.length !== addressArray.length){
+        output.textContent = "The No of Address do not match with Names";
+    } else if ((nameArray.length == addressArray.length && nameArray.length !== phoneArray.length) ){
+        output.textContent = "The No of phone do not match with Names";
+    } 
+        else {
         output.textContent = finalQuery; // Display the generated SQL queries
     }
-    
+
 
     // Clipboard Button validation and displaying
-    if (output.innerHTML === "" || 
-        output.textContent === "Please Paste Data!" || 
-        output.textContent === "Please Paste Name, Address, and Phone!" || 
-        output.textContent === "Please Paste Name!" || 
-        output.textContent === "Please Paste Address!" || 
-        output.textContent === "Please Paste Phone!" || 
-        output.textContent === "Please Paste Name and Phone!" || 
-        output.textContent === "Please Paste Name and Address!" || 
-        output.textContent === "Please Paste Address and Phone!" || 
+    if (output.innerHTML === "" ||
+        output.textContent === "Please Paste Data!" ||
+        output.textContent === "Please Paste Name, Address, and Phone!" ||
+        output.textContent === "Please Paste Name!" ||
+        output.textContent === "Please Paste Address!" ||
+        output.textContent === "Please Paste Phone!" ||
+        output.textContent === "Please Paste Name and Phone!" ||
+        output.textContent === "Please Paste Name and Address!" ||
+        output.textContent === "Please Paste Address and Phone!" ||
         output.textContent === "The number of Names, Address, and Phone numbers do not match!") {
-    
-            showBtn.textContent = ""; // Clear the button text  
-            copyBtn.textContent = ""; // Clear the button text
-            showBtn.style.padding = "0"; // Hide the button by removing padding
-            copyBtn.style.padding = "0"; // Hide the button by removing padding.
-            numberofrows.textContent = ""; // Clear the number of rows count
+
+        showBtn.textContent = ""; // Clear the button text  
+        copyBtn.textContent = ""; // Clear the button text
+        showBtn.style.padding = "0"; // Hide the button by removing padding
+        copyBtn.style.padding = "0"; // Hide the button by removing padding.
+        numberofrows.textContent = ""; // Clear the number of rows count
 
     }
-    
+
     else {
         copyBtn.textContent = "Copy to clipboard";
         copyBtn.style.padding = "6px 8px";
