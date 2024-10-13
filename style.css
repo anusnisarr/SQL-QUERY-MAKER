@@ -40,7 +40,7 @@ body {
     box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.5);
 }
 
-.boxheading {
+.headingInputSection2 {
     width: 100%;
     display: flex;
     height: 8px;
@@ -52,34 +52,34 @@ body {
     gap: 12px;
 }
 
-#topinputheading {
+.headingInputSection1 {
     width: 100%;
     display: flex;
-    height: 8px;
+    justify-content: space-evenly;
+    /* height: 100px; */
     font-size: 9px;
     color: #BB86FC;
     /* margin-bottom: 0.5px; */
     text-transform: uppercase;
-    letter-spacing: 1px;
-    gap: 12px;
+    gap: 0px;
 }
 
-#topinputheading h2 {
+.headingInputSection1 h2 {
+    width: 100%;
+    /* padding-left: 10px; */
+}
+
+.headingInputSection2 h2 {
     width: 50%;
     /* padding-left: 10px; */
 }
 
-.boxheading h2 {
-    width: 50%;
-    /* padding-left: 10px; */
-}
-
-.textarea {
+.inputsection2 {
     display: flex;
     gap: 10px;
 }
 
-/* Textarea Styling */
+/* inputsection2 Styling */
 textarea {
     width: 100%;
     height: 250px;
@@ -125,17 +125,52 @@ textarea:focus {
     margin-bottom: 20px;
 }
 
-.tableandbranch {
+.inputsection1 {
     display: flex;
+    /* flex-wrap:wrap; */
+    width: 100%;
     gap: 12px;
 }
 
+.inputsection1 input[type="date"], input[type="text"]{
+    display: flex;
+    width: 100%;
+    /* width: calc(25% - 12px); */
+    padding: 12px;
+    background-color: #2C2C2C;
+    border: 2px solid #333;
+    border-radius: 8px;
+    color: #E0E0E0;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s;
+
+}
 #selectQuery {
     margin-bottom: 15px;
     color: #d0d0d0;
 }
 
-input[type="text"],
+/* input[type="text"],
+select {
+    width: 100%;
+    padding: 12px;
+    background-color: #2C2C2C;
+    border: 2px solid #333;
+    border-radius: 8px;
+    color: #E0E0E0;
+    font-size: 15px;
+    outline: none;
+    transition: border-color 0.3s;
+
+} */
+
+input[type="date"]:focus,
+select:focus {
+    border-color: #BB86FC;
+}
+
+
 select {
     width: 100%;
     padding: 12px;
@@ -154,6 +189,7 @@ select:focus {
     border-color: #BB86FC;
 }
 
+
 /* Submit Button Styling */
 input[type="submit"] {
     background-color: #b57df9;
@@ -170,6 +206,11 @@ input[type="submit"]:hover {
     background-color: #9c4dfcc6;
     transform: translateX(-1px)
 }
+#grnDate{
+    display: flex;
+    justify-content: flex-start;
+}
+
 
 /* Output Styling */
 .output {

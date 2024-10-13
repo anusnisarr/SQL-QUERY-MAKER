@@ -1,14 +1,15 @@
 let submitbtn = document.querySelector("#submit");
+let inputFeild = document.querySelector(".inputFeild");
 let output = document.querySelector(".result");
-let feildsHeading = document.querySelector("#topinputheading");
+let feildsHeading = document.querySelector(".headingInputSection1");
 let tableName = document.querySelector("#tableName");
 let branchCode = document.querySelector("#branchCode");
-let branchCodediv = document.querySelector(".tableandbranch")
+let inputsection1 = document.querySelector(".inputsection1")
 let inputBarcodes = "";
 let quoteBarcode = "";
 let selectQueryOption = document.querySelector("#selectQuery");
-let boxHeading = document.querySelector(".boxheading");
-let textarea = document.querySelector(".textarea");
+let headingInputSection2 = document.querySelector(".headingInputSection2");
+let inputsection2 = document.querySelector(".inputsection2");
 let copyBtn = document.getElementById("copyBtn");
 let showBtn = document.getElementById("showBtn");
 let numberofrows = document.querySelector(".noofrows");
@@ -17,60 +18,144 @@ let secondQuery = "";
 let firstQuery = "";
 let currentDate = new Date();
 
-submitbtn.addEventListener("click", function () {
-    if (selectQueryOption.value === "update-SaleRate") {
-        SalerateUpdateQuery();
-    }
-    else if (selectQueryOption.value === "insertCustomer") {
-        customerInsertQuery();
-    }
-    else if (selectQueryOption.value === "update-SKU") {
-        skuUpdateQuery()
-    }
-    else if (selectQueryOption.value === "InsertGRN") {
-        grnInsertQuery()
-    }
-});
-
-
 selectQueryOption.addEventListener("click", function () {
     if (selectQueryOption.value === "update-SaleRate") {
-        boxHeading.innerHTML = "<h2>BARCODES:</h2><h2>SALE_RATE:</h2>";
-        textarea.innerHTML = "<textarea name=''class='barcodeBox' placeholder='Paste Barcodes here...' wrap='soft'></textarea><textarea name=''class='saleRateBox' placeholder='Paste Sales here...' wrap='soft'></textarea>"
-        branchCodediv.innerHTML = "<input type='text' placeholder='tableName' id='tableName' value='items'>"
-        feildsHeading.innerHTML = "<h2>Table Name</h2>"
+        inputFeild.innerHTML = `
+            <div class="headingInputSection1">
+               <h2>Table Name</h2>
+           </div>
+            <div class="inputsection1">
+               <input type = 'text' placeholder = 'tableName' id = 'tableName' value = 'items'>
+            </div>
+            <div class="headingInputSection2">
+                <h2>BARCODES:</h2>
+                <h2>SALE_RATE:</h2>
+            </div>
+            <div class="inputsection2">
+                <textarea class='barcodeBox' placeholder='Paste Barcodes here...' wrap='soft'></textarea>
+                <textarea class='saleRateBox' placeholder='Paste Sales here...' wrap='soft'></textarea>
+            </div>
+            <input type="submit" id="submit">
+        `;
+        // Reassign event listener after the DOM update
+        document.getElementById("submit").addEventListener("click", function() {
+            SalerateUpdateQuery();
+        });
     }
 
     else if (selectQueryOption.value === "insertCustomer") {
-        boxHeading.innerHTML = "<h2>NAME:</h2><h2>ADDRESS:</h2><h2>PHONE:</h2>";
-        textarea.innerHTML = "<textarea name='' class='nameBox' placeholder='Paste Name here...' wrap='soft'></textarea><textarea name='' class='addressBox' placeholder='Paste Address here...' wrap='soft'></textarea><textarea name='' class='phoneBox' placeholder='Paste Phone Here..' wrap='soft'></textarea>"
-        branchCodediv.innerHTML = "<input type='text' placeholder='tableName' id='tableName' value='customers'><input type='text' placeholder='Branch Code' id='branchCode' value='0001'><input type='text' placeholder='AccountCode' id='AccountCode' value='0002'>"
-        feildsHeading.innerHTML = "<h2>Table Name</h2><h2>Branch Code</h2><h2>Account Code</h2>"
-        // <p id='accoundCodep'></p><h2>ACC CODE:</h2>
+        inputFeild.innerHTML = `
+            <div class="headingInputSection1">
+                <h2>Table Name:</h2>
+                <h2>Branch Code:</h2>
+                <h2>Account Code:</h2>
+            </div>
+            <div class="inputsection1">
+                <input type='text' placeholder='tableName' id='tableName' value='customers'>
+                <input type='text' placeholder='Branch Code' id='branchCode' value='0001'>
+                <input type='text' placeholder='AccountCode' id='AccountCode' value='0002'>
+            </div>
+            <div class="headingInputSection2">
+                <h2>NAME:</h2>
+                <h2>ADDRESS:</h2>
+                <h2>PHONE:</h2>
+            </div>
+            <div class="inputsection2">
+               <textarea class='nameBox' placeholder='Paste Name here...' wrap='soft'></textarea>
+               <textarea class='addressBox' placeholder='Paste Address here...' wrap='soft'></textarea>
+               <textarea class='phoneBox' placeholder='Paste Phone Here..' wrap='soft'></textarea>
+            </div>  
+            <input type="submit" id="submit">
+        `;
+        // Reassign event listener after the DOM update
+        document.getElementById("submit").addEventListener("click", function() {
+            customerInsertQuery();
+        });
     }
+
     else if (selectQueryOption.value === "update-SKU") {
-        boxHeading.innerHTML = "<h2>BARCODES:</h2><h2>SKU:</h2>";
-        textarea.innerHTML = "<textarea name=''class='barcodeBox' placeholder='Paste Barcodes here...' wrap='soft'></textarea><textarea name=''class='skuBox' placeholder='Paste SKU here...' wrap='soft'></textarea>"
-        branchCodediv.innerHTML = "<input type='text' placeholder='tableName' id='tableName' value='items'>"
-        feildsHeading.innerHTML = "<h2>Table Name</h2>"
+        inputFeild.innerHTML = `
+            <div class="headingInputSection1">
+                <h2>Table Name:</h2>
+            </div>
+            <div class="inputsection1">
+                <input type='text' placeholder='tableName' id='tableName' value='items'>
+            </div>
+            <div class="headingInputSection2">
+                <h2>BARCODES:</h2>
+                <h2>SKU:</h2>
+            </div>
+            <div class="inputsection2">
+                <textarea class='barcodeBox' placeholder='Paste Barcodes here...' wrap='soft'></textarea>
+                <textarea class='skuBox' placeholder='Paste SKU here...' wrap='soft'></textarea>
+            </div>
+            <input type="submit" id="submit">
+        `;
+        // Reassign event listener after the DOM update
+        document.getElementById("submit").addEventListener("click", function() {
+            skuUpdateQuery();
+        });
     }
+
     else if (selectQueryOption.value === "InsertGRN") {
-        boxHeading.innerHTML = "<h2>BARCODE:</h2><h2>UNIT CODE:</h2><h2>QUANTITY:</h2><h2>PUR RATE:</h2>";
-        textarea.innerHTML = "<textarea name='' class='barcodeBox' placeholder='Paste Barcode here...' wrap='soft'></textarea><textarea name='' class='unitCodeBox' placeholder='Paste Unit Code here...' wrap='soft'></textarea><textarea name='' class='QtyBox' placeholder='Paste Quantity Here..' wrap='soft'></textarea><textarea name='' class='purRateBox' placeholder='Paste Purchase Rate Here..' wrap='soft'></textarea>"
-        branchCodediv.innerHTML = "<input type='text' placeholder='tableName' id='tableName' value='customers'><input type='text' placeholder='Branch Code' id='branchCode' value='0001'><input type='text' placeholder='AccountCode' id='AccountCode' value='0002'>"
-        feildsHeading.innerHTML = "<h2>Table Name</h2><h2>Branch Code</h2><h2>Account Code</h2>"
-
-    }
-
+        inputFeild.innerHTML = `
+            <div class="headingInputSection1">
+                <h2>Supplier Code:</h2>
+                <h2>Branch Code:</h2>
+            </div>
+            <div class="inputsection1">
+                <input type="text" placeholder="Supplier Code" id="SupplierCode" value="Supplier">
+                <input type="text" placeholder="Branch Code" id="branchCode" value="0001">
+            </div>
+            <div class="headingInputSection1">
+                <h2>GRN No:</h2>
+                <h2>GRN DATE:</h2>
+            </div>
+            <div class="inputsection1">
+                <input type="text" placeholder="GRN NO:" id="grnNo" value="0001/Ad">
+                <input type="date" id="grnDate" placeholder="dd-mm-yyyy">
+                </div>
+            <div class="headingInputSection2">
+                <h2>BARCODE:</h2>
+                <h2>UNIT CODE:</h2>
+                <h2>QUANTITY:</h2>
+                <h2>PUR RATE:</h2>
+            </div>
+            <div class="inputsection2">
+                <textarea class="barcodeBox" placeholder="Paste Barcode here..." wrap="soft"></textarea>
+                <textarea class="unitCodeBox" placeholder="Paste Unit Code here..." wrap="soft"></textarea>
+                <textarea class="QtyBox" placeholder="Paste Quantity here..." wrap="soft"></textarea>
+                <textarea class="purRateBox" placeholder="Paste Purchase Rate here..." wrap="soft"></textarea>
+            </div>
+            <input type="submit" id="submit">
+        `;
+        // Reassign event listener after the DOM update
+        document.getElementById("submit").addEventListener("click", function() {
+            grnInsertQuery();
+        });     
+        // formate GRN DATE
+        let dateInput = document.querySelector("#grnDate");
+        let grnDate = "";
+            dateInput.addEventListener("change", function() {
+            let selectedDate = new Date(dateInput.value); // Convert to Date object
+            let formatDate = selectedDate.toLocaleDateString('en-GB');
+            grnDate = formatDate;
+        console.log("inside",formatDate)
+        
+        });
+    console.log("outside",grnDate)
+// KALLE TU BATA DIO TU
+  
+}    
     else {
-        branchCodediv.innerHTML = ""
-        boxHeading.innerHTML = "";
-        textarea.innerHTML = "";
+        inputsection1.innerHTML = ""
+        headingInputSection2.innerHTML = "";
+        inputsection2.innerHTML = "";
         output.innerHTML = "";
         feildsHeading.innerHTML = "";
+}  
+});
 
-    }
-})
 //FOR SALE RATE UPDATE QUERY
 function SalerateUpdateQuery() {
     let barcodes = document.querySelector(".barcodeBox");
@@ -84,7 +169,6 @@ function SalerateUpdateQuery() {
     // Ensure that empty lines are filtered out
     barcodesArray = barcodesArray.filter(barcode => barcode !== "");
     saleRateArray = saleRateArray.filter(rate => rate !== "");
-
 
     // Ensure tableName is provided
     let tableName = document.querySelector("#tableName");
@@ -129,6 +213,7 @@ function SalerateUpdateQuery() {
         copyBtn.textContent = "Copy to clipboard";
         copyBtn.style.padding = "6px 8px";
     };
+    console.log(firstQuery)
 };
 
 //FOR SALE RATE UPDATE QUERY
@@ -327,12 +412,10 @@ function grnInsertQuery() {
     // qtyArray = qtyArray.filter(qty => qty !== "");
     // puRateArray = puRateArray.filter(rate => rate !== "");
 
-
-
     // Ensure tableName is provided
-    let tableName = document.querySelector("#tableName");
-    if (tableName.value.trim() === "") {
-        output.textContent = "Please provide a table name!";
+    let SupplierCode = document.querySelector("#SupplierCode");
+    if (SupplierCode.value.trim() === "") {
+        output.textContent = "Please provide a Supplier Code!";
         return;
     }
 
@@ -467,7 +550,7 @@ let showButton = () => {
         if (toggle && selectQueryOption.value === "InsertGRN") {
             showBtn.innerHTML = "Show Master Query";
             output.textContent = secondQuery;  // Show COA query
-        } 
+        }
         else {
             showBtn.innerHTML = "Show Details Query";
             output.textContent = firstQuery;  // Show Final query
