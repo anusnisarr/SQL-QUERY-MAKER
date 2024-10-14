@@ -17,7 +17,7 @@ let numberQuery = 0;
 let secondQuery = "";
 let firstQuery = "";
 let currentDate = new Date();
-
+let formatDate='';
 selectQueryOption.addEventListener("click", function () {
     if (selectQueryOption.value === "update-SaleRate") {
         inputFeild.innerHTML = `
@@ -113,7 +113,7 @@ selectQueryOption.addEventListener("click", function () {
             </div>
             <div class="inputsection1">
                 <input type="text" placeholder="GRN NO:" id="grnNo" value="0001/Ad">
-                <input type="date" id="grnDate" placeholder="dd-mm-yyyy">
+                <input type="date" id="grnDate" placeholder="dd-mm-yyyy" value="">
                 </div>
             <div class="headingInputSection2">
                 <h2>BARCODE:</h2>
@@ -132,28 +132,30 @@ selectQueryOption.addEventListener("click", function () {
         // Reassign event listener after the DOM update
         document.getElementById("submit").addEventListener("click", function() {
             grnInsertQuery();
-        });     
-        // formate GRN DATE
-        let dateInput = document.querySelector("#grnDate");
-        let grnDate = "";
-            dateInput.addEventListener("change", function() {
-            let selectedDate = new Date(dateInput.value); // Convert to Date object
-            let formatDate = selectedDate.toLocaleDateString('en-GB');
-            grnDate = formatDate;
-        console.log("inside",formatDate)
+        });   
+        let inputDate = document.getElementById('grnDate');
         
+        inputDate.addEventListener('click', function() {
+            inputDate.showPicker();
+            inputDate.addEventListener('change', function() {
+            let selectedDate = new Date(inputDate.value); // Convert to Date object
+            formatDate = selectedDate.toLocaleDateString('en-GB');
+                
+            });
         });
-    console.log("outside",grnDate)
-// KALLE TU BATA DIO TU
-  
-}    
+    }
+    
+    // formate GRN DATE
+    
+    // KALLE TU BATA DIO TU
     else {
         inputsection1.innerHTML = ""
         headingInputSection2.innerHTML = "";
         inputsection2.innerHTML = "";
         output.innerHTML = "";
         feildsHeading.innerHTML = "";
-}  
+    }
+
 });
 
 //FOR SALE RATE UPDATE QUERY
@@ -426,6 +428,14 @@ function grnInsertQuery() {
         return;
     }
 
+        // formate GRN DATE
+        // let dateInput = document.querySelector("#grnDate").showPicker();
+        // let selectedDate = new Date(dateInput.value); // Convert to Date object
+        // let formatDate = selectedDate.toLocaleDateString('en-GB');
+        // console.log("inside",formatDate)
+
+
+
     // Create separate 'UPDATE' queries for each customer pair
     let detail_inv_transactions = barcodesrray.map((barcode, index) => {
         return `INSERT INTO detail_inv_transactions 
@@ -436,7 +446,7 @@ function grnInsertQuery() {
     let master_inv_transactions = barcodesrray.map((name, index) => {
         return `INSERT INTO master_inv_transactions 
          (id, BranchCode, TransactionNo, InvoiceNo, Nature, RefVoucherNo, PartyInvNo, TransactionDate, GatePassNo, BranchSupplierCode, AccountCode, BookAccountCode, DiscountAccountCode, ItemDiscountAccountCode, SalesTaxAccountCode, ItemSTAccountCode, ItemAdditionalDiscountAccountCode, ItemFocGSTAccountCode, Description, DocumentReference, GrossAmount, DiscountP, Discount, SalesTaxP, SalesTax, NetAmount, UserId, IRSNoRef, PurchaserCode, IsSalesBasis, trDateTime, GUID, RecordNo, brcode_trno_nature, ICRefNo, created_at, updated_at, location_code, terms, dept_code, IsApproved) 
-        VALUES (NULL, '${branchCode.value}', '00022/6St', '', '1', '10063452', '', '${currentDate.toISOString().split('T')[0]} 00:00:00', '', '00001', '02-002-001-0001', '05-001-001-0001', '', '', '', '', '', '', '', '', '6800.00', '0.00', '0.00', '0.00', '0.00', '6800.00', '', '', '', '0', '2021-06-10 07:59:14', '0', '0', '', '', '${currentDate.toISOString().split('T')[0]} 00:00:00', '${currentDate.toISOString().split('T')[0]} 00:00:00', '0', NULL, NULL, '1');`
+        VALUES (NULL, '${branchCode.value}', '00022/6St', '', '1', '10063452', '', '${formatDate.replace(/\//g , '-')} 00:00:00', '', '00001', '02-002-001-0001', '05-001-001-0001', '', '', '', '', '', '', '', '', '6800.00', '0.00', '0.00', '0.00', '0.00', '6800.00', '', '', '', '0', '2021-06-10 07:59:14', '0', '0', '', '', '${currentDate.toISOString().split('T')[0]} 00:00:00', '${currentDate.toISOString().split('T')[0]} 00:00:00', '0', NULL, NULL, '1');`
     });
 
     // Join all the queries with a newline character for output
