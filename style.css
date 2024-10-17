@@ -132,7 +132,7 @@ textarea:focus {
     gap: 12px;
 }
 
-.inputsection1 input[type="date"], input[type="text"]{
+.inputsection1 input[type="date"], input[type="text"], input[type="number"]{
     display: flex;
     width: 100%;
     /* width: calc(25% - 12px); */
@@ -151,7 +151,20 @@ textarea:focus {
     color: #d0d0d0;
 }
 
-/* input[type="text"],
+input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none; /* Hides the calendar icon */
+}
+
+input[type="date"]:focus,input[type="text"]:focus,
+select:focus {
+    border-color: #BB86FC;
+}
+
+
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
 select {
     width: 100%;
     padding: 12px;
@@ -163,31 +176,8 @@ select {
     outline: none;
     transition: border-color 0.3s;
 
-} */
-
-input[type="date"]:focus,
-select:focus {
-    border-color: #BB86FC;
 }
 
-
-select {
-    width: 100%;
-    padding: 12px;
-    background-color: #2C2C2C;
-    border: 2px solid #333;
-    border-radius: 8px;
-    color: #E0E0E0;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.3s;
-
-}
-
-input[type="text"]:focus,
-select:focus {
-    border-color: #BB86FC;
-}
 
 
 /* Submit Button Styling */

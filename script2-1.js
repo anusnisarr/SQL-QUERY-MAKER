@@ -37,6 +37,14 @@ selectQueryOption.addEventListener("click", function () {
             </div>
             <input type="submit" id="submit">
         `;
+        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2",{
+            x:-25,
+            delay:0.05,
+            duration:0.4,
+            opacity:0,
+            stagger:0.05
+        });
+      
         // Reassign event listener after the DOM update
         document.getElementById("submit").addEventListener("click", function() {
             SalerateUpdateQuery();
@@ -67,6 +75,15 @@ selectQueryOption.addEventListener("click", function () {
             </div>  
             <input type="submit" id="submit">
         `;
+
+        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2",{
+            x:-25,
+            delay:0.05,
+            duration:0.4,
+            opacity:0,
+            stagger:0.05
+        });
+
         // Reassign event listener after the DOM update
         document.getElementById("submit").addEventListener("click", function() {
             customerInsertQuery();
@@ -91,6 +108,15 @@ selectQueryOption.addEventListener("click", function () {
             </div>
             <input type="submit" id="submit">
         `;
+
+        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2",{
+            x:-25,
+            delay:0.05,
+            duration:0.4,
+            opacity:0,
+            stagger:0.05
+        });
+
         // Reassign event listener after the DOM update
         document.getElementById("submit").addEventListener("click", function() {
             skuUpdateQuery();
@@ -101,11 +127,11 @@ selectQueryOption.addEventListener("click", function () {
         inputFeild.innerHTML = `
             <div class="headingInputSection1">
                 <h2>Supplier Code:</h2>
-                <h2>Branch Code:</h2>
+                <h2>Supplier Account</h2>
             </div>
             <div class="inputsection1">
                 <input type="text" placeholder="Supplier Code" id="SupplierCode" value="Supplier">
-                <input type="text" placeholder="Branch Code" id="branchCode" value="0001">
+                <input type="text" placeholder="Supplier Account" id="suppAcc" value="02-002-001-0001">
             </div>
             <div class="headingInputSection1">
                 <h2>GRN No:</h2>
@@ -115,6 +141,14 @@ selectQueryOption.addEventListener("click", function () {
                 <input type="text" placeholder="GRN NO:" id="grnNo" value="0001/Ad">
                 <input type="date" id="grnDate" placeholder="dd-mm-yyyy" value="">
                 </div>
+            <div class="headingInputSection1">
+                <h2>Voucher No:</h2>
+                <h2>Branch Code:</h2>
+            </div>
+            <div class="inputsection1">
+                <input type="text" placeholder="Voucher No:" id="voucherNo" value="120120241">
+                <input type="number" placeholder="Branch Code" id="branchCode" value="0001">
+                </div>    
             <div class="headingInputSection2">
                 <h2>BARCODE:</h2>
                 <h2>UNIT CODE:</h2>
@@ -129,18 +163,30 @@ selectQueryOption.addEventListener("click", function () {
             </div>
             <input type="submit" id="submit">
         `;
+
+        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2",{
+            x:-25,
+            delay:0.05,
+            duration:0.4,
+            opacity:0,
+            stagger:0.05
+        });
+
         // Reassign event listener after the DOM update
         document.getElementById("submit").addEventListener("click", function() {
             grnInsertQuery();
-        });   
+        });
+
+        // formating GRN Date
+
         let inputDate = document.getElementById('grnDate');
         
         inputDate.addEventListener('click', function() {
             inputDate.showPicker();
             inputDate.addEventListener('change', function() {
             let selectedDate = new Date(inputDate.value); // Convert to Date object
-            formatDate = selectedDate.toLocaleDateString('en-GB');
-                
+            formatDate = selectedDate.toLocaleDateString('sv-SE');
+                console.log(formatDate)
             });
         });
     }
@@ -149,11 +195,12 @@ selectQueryOption.addEventListener("click", function () {
     
     // KALLE TU BATA DIO TU
     else {
-        inputsection1.innerHTML = ""
-        headingInputSection2.innerHTML = "";
-        inputsection2.innerHTML = "";
+        inputFeild.innerHTML ="";
         output.innerHTML = "";
-        feildsHeading.innerHTML = "";
+        // inputsection1.innerHTML = ""
+        // headingInputSection2.innerHTML = "";
+        // inputsection2.innerHTML = "";
+        // feildsHeading.innerHTML = "";
     }
 
 });
@@ -214,6 +261,8 @@ function SalerateUpdateQuery() {
     else {
         copyBtn.textContent = "Copy to clipboard";
         copyBtn.style.padding = "6px 8px";
+        copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
+        copyBtn.style.transition = "background-color 0.3s ease";
     };
     console.log(firstQuery)
 };
@@ -275,6 +324,8 @@ function skuUpdateQuery() {
     else {
         copyBtn.textContent = "Copy to clipboard";
         copyBtn.style.padding = "6px 8px";
+        copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
+        copyBtn.style.transition = "background-color 0.3s ease";
     };
 };
 
@@ -385,6 +436,8 @@ function customerInsertQuery() {
         copyBtn.style.padding = "6px 8px";
         showBtn.textContent = "Show COA";
         showBtn.style.padding = "6px 8px";
+        copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
+        copyBtn.style.transition = "background-color 0.3s ease";
     }
     showButton();
 };
@@ -428,14 +481,20 @@ function grnInsertQuery() {
         return;
     }
 
-        // formate GRN DATE
-        // let dateInput = document.querySelector("#grnDate").showPicker();
-        // let selectedDate = new Date(dateInput.value); // Convert to Date object
-        // let formatDate = selectedDate.toLocaleDateString('en-GB');
-        // console.log("inside",formatDate)
-
-
-
+    
+    // Ensure GRN NO is provided
+    let grnNo = document.querySelector("#grnNo");
+    if (grnNo.value.trim() === "") {
+        output.textContent = "Please provide a GRN No!";
+        return;
+    }
+    
+    // Ensure GRN Date is provided
+    let grnDate = document.querySelector("#grnDate");
+    if (grnDate.value.trim() === "") {
+        output.textContent = "Please provide a GRN Date!";
+        return;
+    }
     // Create separate 'UPDATE' queries for each customer pair
     let detail_inv_transactions = barcodesrray.map((barcode, index) => {
         return `INSERT INTO detail_inv_transactions 
@@ -446,8 +505,43 @@ function grnInsertQuery() {
     let master_inv_transactions = barcodesrray.map((name, index) => {
         return `INSERT INTO master_inv_transactions 
          (id, BranchCode, TransactionNo, InvoiceNo, Nature, RefVoucherNo, PartyInvNo, TransactionDate, GatePassNo, BranchSupplierCode, AccountCode, BookAccountCode, DiscountAccountCode, ItemDiscountAccountCode, SalesTaxAccountCode, ItemSTAccountCode, ItemAdditionalDiscountAccountCode, ItemFocGSTAccountCode, Description, DocumentReference, GrossAmount, DiscountP, Discount, SalesTaxP, SalesTax, NetAmount, UserId, IRSNoRef, PurchaserCode, IsSalesBasis, trDateTime, GUID, RecordNo, brcode_trno_nature, ICRefNo, created_at, updated_at, location_code, terms, dept_code, IsApproved) 
-        VALUES (NULL, '${branchCode.value}', '00022/6St', '', '1', '10063452', '', '${formatDate.replace(/\//g , '-')} 00:00:00', '', '00001', '02-002-001-0001', '05-001-001-0001', '', '', '', '', '', '', '', '', '6800.00', '0.00', '0.00', '0.00', '0.00', '6800.00', '', '', '', '0', '2021-06-10 07:59:14', '0', '0', '', '', '${currentDate.toISOString().split('T')[0]} 00:00:00', '${currentDate.toISOString().split('T')[0]} 00:00:00', '0', NULL, NULL, '1');`
+        VALUES (NULL, '${branchCode.value}', '00022/6St', '', '1', '10063452', '', '${formatDate} 00:00:00', '', '00001', '02-002-001-0001', '05-001-001-0001', '', '', '', '', '', '', '', '', '6800.00', '0.00', '0.00', '0.00', '0.00', '6800.00', '', '', '', '0', '${currentDate.toLocaleDateString('fr-CA')}00:00:00', '0', '0', '', '', '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', '0', NULL, NULL, '1');`
     });
+
+    let Amount = 0;
+    let total = puRateArray.map((amount,index)=>{
+        return amount * qtyArray[index]
+    });
+
+    total.forEach(element => {
+    Amount += element
+});
+    
+console.log("Amount",total)
+console.log("Total Amount",Amount)
+
+let voucher_details = 
+ `
+    INSERT INTO voucher_details
+(
+    id, BranchCode, VoucherTypeCode, VoucherNo, AccountCode, 
+    CostCenterCode, CurrencyCode, CurrencyCurrentRate, Amount, 
+    Debit, Credit, ChequeNo, ChequeDate, BillRefNo, 
+    BillRefRemarks, Remarks, Description, RecordNo, 
+    DebitFC, CreditFC, deleted_at, created_at, updated_at, 
+    dumycheque, ChequeName
+) 
+VALUES 
+(
+    NULL, '${branchCode.value}', 'GRN', '123456', '02-002-001-0003', 
+    '0', '0', '0', '${Amount}', 
+    '0', '13072.43', '', '0000-00-00 00:00:00', 
+    '00288/1ad', NULL, NULL, 'Goods Receive Note Voucher , 23-08-2024 , 00288/1ad', 
+    '0', '0', '0', '2024-08-12 00:00:00', '2024-08-12 00:00:00', 
+    NULL, NULL
+);
+`
+
 
     // Join all the queries with a newline character for output
     firstQuery = detail_inv_transactions.join("\n");
@@ -539,6 +633,8 @@ function grnInsertQuery() {
         copyBtn.style.padding = "6px 8px";
         showBtn.textContent = "Show Master Query";
         showBtn.style.padding = "6px 8px";
+        copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
+        copyBtn.style.transition = "background-color 0.3s ease";
     }
 
     showButton();
@@ -549,29 +645,31 @@ let showButton = () => {
     let toggle = true;  // Flag to track which query to display
 
     showBtn.addEventListener("click", function () {
-        if (toggle && selectQueryOption.value === "insertCustomer") {
-            showBtn.innerHTML = "Show Customer Query";
-            output.textContent = secondQuery;  // Show COA query
-        }
-        else {
-            showBtn.innerHTML = "Show COA Query";
-            output.textContent = firstQuery;  // Show Final query
-        }
-        if (toggle && selectQueryOption.value === "InsertGRN") {
-            showBtn.innerHTML = "Show Master Query";
-            output.textContent = secondQuery;  // Show COA query
-        }
-        else {
-            showBtn.innerHTML = "Show Details Query";
-            output.textContent = firstQuery;  // Show Final query
-
+        if (selectQueryOption.value === "insertCustomer") {
+            if (toggle) {
+                showBtn.innerHTML = "Show Customer Query";
+                output.textContent = secondQuery;  // Show COA query
+            } else {
+                showBtn.innerHTML = "Show COA Query";
+                output.textContent = firstQuery;  // Show Final query
+            }
+        } else if (selectQueryOption.value === "InsertGRN") {
+            if (toggle) {
+                showBtn.innerHTML = "Show Master Query";
+                output.textContent = secondQuery;  // Show COA query
+            } else {
+                showBtn.innerHTML = "Show Details Query";
+                output.textContent = firstQuery;  // Show Final query
+            }
+            
         }
         toggle = !toggle;  // Toggle the flag on each click
         copyBtn.innerHTML = "Copy to clipboard";
         copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
-        copyBtn.style.transition = "background-color  0.3s ease";
+        copyBtn.style.transition = "background-color 0.3s ease";
     });
 };
+
 
 const copyToClip = () => {
     copyBtn.addEventListener("click", function () {
@@ -594,5 +692,14 @@ function resetCopyButton() {
     numberofrows.textContent = ""; // Clear the number of rows count
 }
 selectQueryOption.addEventListener("input", resetCopyButton);
+output.addEventListener("change", function(){
+    if (copyBtn.innerHTML === "Copied to clipboard!"){
+        copyBtn.innerHTML = "Copy to clipboard";
+        copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
+        copyBtn.style.transition = "background-color 0.3s ease";
+
+    }
+});
+
 
 copyToClip();
