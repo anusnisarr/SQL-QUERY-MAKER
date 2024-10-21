@@ -12,13 +12,17 @@ let headingInputSection2 = document.querySelector(".headingInputSection2");
 let inputsection2 = document.querySelector(".inputsection2");
 let copyBtn = document.getElementById("copyBtn");
 let showBtn = document.getElementById("showBtn");
+let showbtnContainer = document.querySelector(".showbtnContainer")
+let showVhBtn = document.getElementById("showVhBtn");
 let numberofrows = document.querySelector(".noofrows");
 let numberQuery = 0;
 let secondQuery = "";
 let firstQuery = "";
 let currentDate = new Date();
-let formatDate='';
-selectQueryOption.addEventListener("click", function () {
+let formatDate = '';
+let voucher_details = "";
+
+selectQueryOption.addEventListener("change", function () {
     if (selectQueryOption.value === "update-SaleRate") {
         inputFeild.innerHTML = `
             <div class="headingInputSection1">
@@ -37,16 +41,16 @@ selectQueryOption.addEventListener("click", function () {
             </div>
             <input type="submit" id="submit">
         `;
-        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2",{
-            x:-25,
-            delay:0.05,
-            duration:0.4,
-            opacity:0,
-            stagger:0.05
+        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2", {
+            x: -25,
+            delay: 0.05,
+            duration: 0.4,
+            opacity: 0,
+            stagger: 0.05
         });
-      
+
         // Reassign event listener after the DOM update
-        document.getElementById("submit").addEventListener("click", function() {
+        document.getElementById("submit").addEventListener("click", function () {
             SalerateUpdateQuery();
         });
     }
@@ -76,16 +80,16 @@ selectQueryOption.addEventListener("click", function () {
             <input type="submit" id="submit">
         `;
 
-        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2",{
-            x:-25,
-            delay:0.05,
-            duration:0.4,
-            opacity:0,
-            stagger:0.05
+        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2", {
+            x: -25,
+            delay: 0.05,
+            duration: 0.4,
+            opacity: 0,
+            stagger: 0.05
         });
 
         // Reassign event listener after the DOM update
-        document.getElementById("submit").addEventListener("click", function() {
+        document.getElementById("submit").addEventListener("click", function () {
             customerInsertQuery();
         });
     }
@@ -109,16 +113,16 @@ selectQueryOption.addEventListener("click", function () {
             <input type="submit" id="submit">
         `;
 
-        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2",{
-            x:-25,
-            delay:0.05,
-            duration:0.4,
-            opacity:0,
-            stagger:0.05
+        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2", {
+            x: -25,
+            delay: 0.05,
+            duration: 0.4,
+            opacity: 0,
+            stagger: 0.05
         });
 
         // Reassign event listener after the DOM update
-        document.getElementById("submit").addEventListener("click", function() {
+        document.getElementById("submit").addEventListener("click", function () {
             skuUpdateQuery();
         });
     }
@@ -164,38 +168,38 @@ selectQueryOption.addEventListener("click", function () {
             <input type="submit" id="submit">
         `;
 
-        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2",{
-            x:-25,
-            delay:0.05,
-            duration:0.4,
-            opacity:0,
-            stagger:0.05
+        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2", {
+            x: -25,
+            delay: 0.05,
+            duration: 0.4,
+            opacity: 0,
+            stagger: 0.05
         });
 
         // Reassign event listener after the DOM update
-        document.getElementById("submit").addEventListener("click", function() {
+        document.getElementById("submit").addEventListener("click", function () {
             grnInsertQuery();
         });
 
         // formating GRN Date
 
         let inputDate = document.getElementById('grnDate');
-        
-        inputDate.addEventListener('click', function() {
+
+        inputDate.addEventListener('click', function () {
             inputDate.showPicker();
-            inputDate.addEventListener('change', function() {
-            let selectedDate = new Date(inputDate.value); // Convert to Date object
-            formatDate = selectedDate.toLocaleDateString('sv-SE');
+            inputDate.addEventListener('change', function () {
+                let selectedDate = new Date(inputDate.value); // Convert to Date object
+                formatDate = selectedDate.toLocaleDateString('sv-SE');
                 console.log(formatDate)
             });
         });
     }
-    
+
     // formate GRN DATE
-    
+
     // KALLE TU BATA DIO TU
     else {
-        inputFeild.innerHTML ="";
+        inputFeild.innerHTML = "";
         output.innerHTML = "";
         // inputsection1.innerHTML = ""
         // headingInputSection2.innerHTML = "";
@@ -364,20 +368,22 @@ function customerInsertQuery() {
 
     // Create separate 'UPDATE' queries for each customer pair
     let formattedQueries = nameArray.map((name, index) => {
-        return `INSERT INTO ${tableName.value} (BranchCode, CustomerCode, Customer, Address, AreaCode, CityCode, PhoneNo, FaxNo, MobileNo, EmailID, GUID, RecordNo, created_at, updated_at, AreaId, DOB, gender, customer_category, AccountCode)
-        VALUES ('${branchCode.value}','0101-${(accountnumber + index).toString().padStart(2, '0')}-0202', '${nameArray[index]}', '${addressArray[index]}', '', '', '${phoneArray[index]}', '', '${phoneArray[index]}', '', 0, 0, '${currentDate.toISOString().split('T')[0]} 00:00:00', '${currentDate.toISOString().split('T')[0]} 00:00:00', '0', '0000-00-00 00:00:00', '', '', '01-002-004-${(accountnumber + index).toString().padStart(4, '0')}');`;
+        return `INSERT INTO ${tableName.value}(BranchCode, CustomerCode, Customer, Address, AreaCode, CityCode, PhoneNo, FaxNo, MobileNo, EmailID, GUID, RecordNo, created_at, updated_at, AreaId, DOB, gender, customer_category, AccountCode)
+        VALUES ('${branchCode.value}','0101-${(accountnumber + index).toString().padStart(2, '0')}-0202','${nameArray[index]}','${addressArray[index]}','','','${phoneArray[index]}','','${phoneArray[index]}','',0,0,'${currentDate.toISOString().split('T')[0]} 00:00:00','${currentDate.toISOString().split('T')[0]} 00:00:00','0','0000-00-00 00:00:00','','','01-002-004-${(accountnumber + index).toString().padStart(4, '0')}');`
     });
 
     let formattedQueriesCOA = nameArray.map((name, index) => {
-        return `INSERT INTO chart_of_accounts ( BranchCode, HeadCode, AccountCode, Account, ChequeName, CurrencyCode, CurrencyCurrentRate, Amount, OpeningAmount, Type, AccountType, FSFNote, InActive, Status, GUID, RecordNo, DiscountAccount) 
-        VALUES( '${branchCode.value}', '01-002-004', '01-002-004-${(accountnumber + index).toString().padStart(4, '0')}', '${nameArray[index]}', '', 'NULL', '0.00', '0', '0.00', 'H', 'Assets', 0, 1, '1', 0,0,0);`
+        return `INSERT INTO chart_of_accounts (BranchCode, HeadCode, AccountCode, Account, ChequeName, CurrencyCode, CurrencyCurrentRate, Amount, OpeningAmount, Type, AccountType, FSFNote, InActive, Status, GUID, RecordNo, DiscountAccount)
+        VALUES ('${branchCode.value}','01-002-004','01-002-004-${(accountnumber + index).toString().padStart(4, '0')}','${nameArray[index]}','','NULL','0.00','0','0.00','H','Assets',0,1,'1',0,0,0);`;
     });
+
 
     // Join all the queries with a newline character for output
     firstQuery = formattedQueries.join("\n");
 
     // Join all the queries with a newline character for output
     secondQuery = formattedQueriesCOA.join("\n");
+
     //SHOW COUNT OF NO OF ROWS
     for (let i = 1; i <= formattedQueries.length; i++) {
         numberQuery = i;
@@ -481,14 +487,14 @@ function grnInsertQuery() {
         return;
     }
 
-    
+
     // Ensure GRN NO is provided
     let grnNo = document.querySelector("#grnNo");
     if (grnNo.value.trim() === "") {
         output.textContent = "Please provide a GRN No!";
         return;
     }
-    
+
     // Ensure GRN Date is provided
     let grnDate = document.querySelector("#grnDate");
     if (grnDate.value.trim() === "") {
@@ -509,37 +515,33 @@ function grnInsertQuery() {
     });
 
     let Amount = 0;
-    let total = puRateArray.map((amount,index)=>{
+    let total = puRateArray.map((amount, index) => {
         return amount * qtyArray[index]
     });
 
     total.forEach(element => {
-    Amount += element
-});
-    
-console.log("Amount",total)
-console.log("Total Amount",Amount)
+        Amount += element
+    });
 
-let voucher_details = 
- `
-    INSERT INTO voucher_details
-(
+    console.log("Amount", total)
+    console.log("Total Amount", Amount)
+
+    voucher_details =
+        `
+    INSERT INTO voucher_details(
     id, BranchCode, VoucherTypeCode, VoucherNo, AccountCode, 
     CostCenterCode, CurrencyCode, CurrencyCurrentRate, Amount, 
     Debit, Credit, ChequeNo, ChequeDate, BillRefNo, 
     BillRefRemarks, Remarks, Description, RecordNo, 
     DebitFC, CreditFC, deleted_at, created_at, updated_at, 
-    dumycheque, ChequeName
-) 
+    dumycheque, ChequeName) 
 VALUES 
-(
-    NULL, '${branchCode.value}', 'GRN', '123456', '02-002-001-0003', 
+(    NULL, '${branchCode.value}', 'GRN', '123456', '02-002-001-0003', 
     '0', '0', '0', '${Amount}', 
     '0', '13072.43', '', '0000-00-00 00:00:00', 
     '00288/1ad', NULL, NULL, 'Goods Receive Note Voucher , 23-08-2024 , 00288/1ad', 
     '0', '0', '0', '2024-08-12 00:00:00', '2024-08-12 00:00:00', 
-    NULL, NULL
-);
+    NULL, NULL);
 `
 
 
@@ -633,6 +635,10 @@ VALUES
         copyBtn.style.padding = "6px 8px";
         showBtn.textContent = "Show Master Query";
         showBtn.style.padding = "6px 8px";
+        showVhBtn.textContent = "Show Voucher Master Query";
+        showVhBtn.style.padding = "6px 8px";
+        showVhBtn.style.padding = "6px 8px";
+        showVhBtn.style.marginTop = "8px";
         copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
         copyBtn.style.transition = "background-color 0.3s ease";
     }
@@ -642,7 +648,27 @@ VALUES
 };
 
 let showButton = () => {
-    let toggle = true;  // Flag to track which query to display
+    let toggle = true;  // Flag to track which query to display on button click
+    showVhBtn.addEventListener("click", function () {
+        if (toggle) {
+            showVhBtn.innerHTML = "Show Voucher Details Query";
+            output.textContent = 'Under Developmenet';  // Show COA query
+            showBtn.innerHTML = "Show Details Query";
+
+        } else if (showVhBtn.innerHTML === "Show Voucher Master Query") {
+            showVhBtn.innerHTML = "Show Voucher Details Query";
+            output.textContent = 'Under Developmenet';  // Show COA query
+        } else if (!toggle) {
+            showVhBtn.innerHTML = "Show Voucher Master Query";
+            output.textContent = voucher_details;
+        }
+      
+        toggle = !toggle;  // Toggle the flag on each click
+        copyBtn.innerHTML = "Copy to clipboard";
+        copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
+        copyBtn.style.transition = "background-color 0.3s ease";
+        console.log(toggle)
+    });
 
     showBtn.addEventListener("click", function () {
         if (selectQueryOption.value === "insertCustomer") {
@@ -655,18 +681,19 @@ let showButton = () => {
             }
         } else if (selectQueryOption.value === "InsertGRN") {
             if (toggle) {
-                showBtn.innerHTML = "Show Master Query";
-                output.textContent = secondQuery;  // Show COA query
-            } else {
                 showBtn.innerHTML = "Show Details Query";
+                output.textContent = secondQuery;  // Show COA query
+            }else {
+                showBtn.innerHTML = "Show Master Query";
                 output.textContent = firstQuery;  // Show Final query
+                showVhBtn.innerHTML = "Show Voucher Master Query";
             }
-            
         }
         toggle = !toggle;  // Toggle the flag on each click
         copyBtn.innerHTML = "Copy to clipboard";
         copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
         copyBtn.style.transition = "background-color 0.3s ease";
+        console.log(toggle)
     });
 };
 
@@ -692,14 +719,5 @@ function resetCopyButton() {
     numberofrows.textContent = ""; // Clear the number of rows count
 }
 selectQueryOption.addEventListener("input", resetCopyButton);
-output.addEventListener("change", function(){
-    if (copyBtn.innerHTML === "Copied to clipboard!"){
-        copyBtn.innerHTML = "Copy to clipboard";
-        copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
-        copyBtn.style.transition = "background-color 0.3s ease";
-
-    }
-});
-
 
 copyToClip();

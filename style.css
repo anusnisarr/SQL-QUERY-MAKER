@@ -215,6 +215,7 @@ input[type="submit"]:hover {
     letter-spacing: 1px;
 }
 
+
 .noofrows {
     color: #c8c7c7;
     font-size: 13px;
@@ -263,6 +264,7 @@ input[type="submit"]:hover {
     font-family: 'Courier New', Courier, monospace;
     white-space: pre-wrap;
     overflow-wrap: break-word;
+    
 }
 
 /* Responsive Design */
