@@ -655,9 +655,6 @@ let showButton = () => {
             output.textContent = voucher_masters;  // Show COA query
             showBtn.innerHTML = "Show Details Query";
 
-        } else if (showVhBtn.innerHTML === "Show Voucher Master Query") {
-            showVhBtn.innerHTML = "Show Voucher Details Query";
-            output.textContent = 'Under Developmenet';  // Show COA query
         } else if (!toggle) {
             showVhBtn.innerHTML = "Show Voucher Master Query";
             output.textContent = voucher_details;
