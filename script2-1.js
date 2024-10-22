@@ -465,6 +465,10 @@ function grnInsertQuery() {
     let puRateArray = puRate.value.split(/\n/).map(rate => rate.trim().replace(/'/g, '')); // Split and trim Purchase Rate
     let blankpuRate = puRateArray.some(value => value === ""); // Check for blank purchase rates
 
+    let voucherNo = document.querySelector("#voucherNo");
+    let supplierAcc = document.querySelector("#suppAcc");
+
+
 
 
     // Ensure that empty lines are filtered out
@@ -511,7 +515,7 @@ function grnInsertQuery() {
     let master_inv_transactions = barcodesrray.map((name, index) => {
         return `INSERT INTO master_inv_transactions 
          (id, BranchCode, TransactionNo, InvoiceNo, Nature, RefVoucherNo, PartyInvNo, TransactionDate, GatePassNo, BranchSupplierCode, AccountCode, BookAccountCode, DiscountAccountCode, ItemDiscountAccountCode, SalesTaxAccountCode, ItemSTAccountCode, ItemAdditionalDiscountAccountCode, ItemFocGSTAccountCode, Description, DocumentReference, GrossAmount, DiscountP, Discount, SalesTaxP, SalesTax, NetAmount, UserId, IRSNoRef, PurchaserCode, IsSalesBasis, trDateTime, GUID, RecordNo, brcode_trno_nature, ICRefNo, created_at, updated_at, location_code, terms, dept_code, IsApproved) 
-        VALUES (NULL, '${branchCode.value}', '00022/6St', '', '1', '10063452', '', '${formatDate} 00:00:00', '', '00001', '02-002-001-0001', '05-001-001-0001', '', '', '', '', '', '', '', '', '6800.00', '0.00', '0.00', '0.00', '0.00', '6800.00', '', '', '', '0', '${currentDate.toLocaleDateString('fr-CA')}00:00:00', '0', '0', '', '', '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', '0', NULL, NULL, '1');`
+        VALUES (NULL, '${branchCode.value}', '00022/6St', '', '1', '${voucherNo.value}', '', '${formatDate} 00:00:00', '', '00001', '02-002-001-0001', '05-001-001-0001', '', '', '', '', '', '', '', '', '6800.00', '0.00', '0.00', '0.00', '0.00', '6800.00', '', '', '', '0', '${currentDate.toLocaleDateString('fr-CA')}00:00:00', '0', '0', '', '', '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', '0', NULL, NULL, '1');`
     });
 
     let Amount = 0;
@@ -526,22 +530,18 @@ function grnInsertQuery() {
     console.log("Amount", total)
     console.log("Total Amount", Amount)
 
-    voucher_details =
-        `
-    INSERT INTO voucher_details(
-    id, BranchCode, VoucherTypeCode, VoucherNo, AccountCode, 
-    CostCenterCode, CurrencyCode, CurrencyCurrentRate, Amount, 
-    Debit, Credit, ChequeNo, ChequeDate, BillRefNo, 
-    BillRefRemarks, Remarks, Description, RecordNo, 
-    DebitFC, CreditFC, deleted_at, created_at, updated_at, 
-    dumycheque, ChequeName) 
-VALUES 
-(    NULL, '${branchCode.value}', 'GRN', '123456', '02-002-001-0003', 
-    '0', '0', '0', '${Amount}', 
-    '0', '13072.43', '', '0000-00-00 00:00:00', 
-    '00288/1ad', NULL, NULL, 'Goods Receive Note Voucher , 23-08-2024 , 00288/1ad', 
-    '0', '0', '0', '2024-08-12 00:00:00', '2024-08-12 00:00:00', 
-    NULL, NULL);
+voucher_details =
+ `
+INSERT INTO voucher_details
+(id, BranchCode, VoucherTypeCode, VoucherNo, AccountCode, CostCenterCode, CurrencyCode, CurrencyCurrentRate, Amount, Debit, Credit, ChequeNo, ChequeDate, BillRefNo, BillRefRemarks, Remarks, Description, RecordNo, DebitFC, CreditFC, deleted_at, created_at, updated_at, dumycheque, ChequeName, Costcentre_id)
+VALUES(727481, '${branchCode.value}', 'GRN', '${voucherNo.value}', '${supplierAcc.value}', '0', '0', 0.00, ${Amount}, 0.0000, ${Amount}, '', '0000-00-00 00:00:00', '${grnNo.value}', NULL, 'Goods Receive Note Voucher , ${formatDate} , ${grnNo.value}', '', '0', 0.0000, 0.0000, NULL, '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', NULL, NULL, 0);
+`
+
+voucher_masters =
+`
+INSERT INTO voucher_masters
+(id, BranchCode, VoucherTypeCode, VoucherNo, VoucherDate, Narration, BillRefNo, CreditDays, GUID, RecordNo, deleted_at, created_at, updated_at, IsSaleVoucher, created_by, ChequeName, VoucherStatus)
+VALUES(251191, '${branchCode.value}', 'GRN', '${voucherNo.value}', '${formatDate} 00:00:00', 'Goods Receive Note Voucher , ${formatDate} , ${grnNo.value}', '${grnNo.value}', '0', '0', '0', NULL, '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', 1, '46', NULL, 0);
 `
 
 
@@ -652,7 +652,7 @@ let showButton = () => {
     showVhBtn.addEventListener("click", function () {
         if (toggle) {
             showVhBtn.innerHTML = "Show Voucher Details Query";
-            output.textContent = 'Under Developmenet';  // Show COA query
+            output.textContent = voucher_masters;  // Show COA query
             showBtn.innerHTML = "Show Details Query";
 
         } else if (showVhBtn.innerHTML === "Show Voucher Master Query") {
