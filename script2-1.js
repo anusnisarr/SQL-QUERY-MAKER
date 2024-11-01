@@ -506,12 +506,15 @@ function grnInsertQuery() {
         return;
     }
     // Create separate 'UPDATE' queries for each customer pair
-    let detail_inv_transactions = barcodesrray.map((barcode, index) => {
-        return `INSERT INTO detail_inv_transactions 
-        (id, BranchCode, TransactionNo, Nature, PurchaseOrderNo, BarCode, UnitCode, po_quantity, Quantity, BonusQuantity, DemandQuantity, VarianceQty, RetailRate, NetRate, GrossRate, Rate, PurAvgRate, DiscountP, Discount, SalesTaxP, SalesTax, AdditionalDiscountOnGrossP, AdditionalDiscountOnGross, AdditionalDiscountOnAmountP, AdditionalDiscountOnAmount, FocGSTP, FocGST, Remarks, RecordNo, trDatetime, ExpiryDate, BatchNo, AlternateQty, AlternateRate, brcode_trno_nature, created_at, updated_at)
-         VALUES (NULL, '${branchCode.value}', '00022/6St', '1', '', '${barcodesrray[index]}', '${unitCodeArray[index]}', '0.000', '${qtyArray}', '0.000', '0.000', '0.000', '0.000', '3400.0000', '0.0000', '${puRateArray}', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '', '0', '${currentDate.toISOString().split('T')[0]} 00:00:00', '0000-00-00 00:00:00', '', '0.00', '0.00', '', '${currentDate.toISOString().split('T')[0]} 00:00:00', '${currentDate.toISOString().split('T')[0]} 00:00:00');`;
-    });
-
+    // let detail_inv_transactions = barcodesrray.map((barcode, index) => {
+    //     return `INSERT INTO detail_inv_transactions 
+    //     (id, BranchCode, TransactionNo, Nature, PurchaseOrderNo, BarCode, UnitCode, po_quantity, Quantity, BonusQuantity, DemandQuantity, VarianceQty, RetailRate, NetRate, GrossRate, Rate, PurAvgRate, DiscountP, Discount, SalesTaxP, SalesTax, AdditionalDiscountOnGrossP, AdditionalDiscountOnGross, AdditionalDiscountOnAmountP, AdditionalDiscountOnAmount, FocGSTP, FocGST, Remarks, RecordNo, trDatetime, ExpiryDate, BatchNo, AlternateQty, AlternateRate, brcode_trno_nature, created_at, updated_at)
+    //      VALUES (NULL, '${branchCode.value}', '00022/6St', '1', '', '${barcodesrray[index]}', '${unitCodeArray[index]}', '0.000', '${qtyArray}', '0.000', '0.000', '0.000', '0.000', '3400.0000', '0.0000', '${puRateArray}', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '', '0', '${currentDate.toISOString().split('T')[0]} 00:00:00', '0000-00-00 00:00:00', '', '0.00', '0.00', '', '${currentDate.toISOString().split('T')[0]} 00:00:00', '${currentDate.toISOString().split('T')[0]} 00:00:00');`;
+    // });
+   let detail_inv_transactions = barcodesrray.map((barcode, index) => {
+        return `INSERT INTO POSDB_orchidnursery.purchase_order_details (id, BranchCode, PurchaseOrderNo, PurchaseOrderDate, RequisitionNo, BarCode, UnitCode, FloorQty, WHQty, CWHQty, MinQty, MaxQty, ReOrderQty, RequestedQty, Totalconsumption, TotalPurchase, Rate, Amount, DiscPer, DiscAmount, GSTPer, GSTAmount, NetRate, NetAmount, RetailRate, Margin, MarkUp, FirstRecv, LastRecv, LastSold, Remarks, LocationCode, CategoryCode, trDateTime, DateOfDelivery, created_at, updated_at, AlternateQty, AlternateRate) 
+                                                                VALUES (NULL, '0001', '${grnNo.value}', '2024-06-18 00:00:00', '', 'T-DR-50Ltr-3-0-3-5', '', 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 7.00, 0.00, 0.00, 550.00, 3850.00, 0.00, 0.00, 5.00, 192.50, 577.50, 4042.50, 0.00, 0.00, 0.00, '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', '', '', '2024-06-23 12:26:21', '2024-06-18 00:00:00', '2024-06-23 12:26:21', '2024-06-23 12:26:21', 0.00, 0.00);`;
+     });
     let master_inv_transactions = barcodesrray.map((name, index) => {
         return `INSERT INTO master_inv_transactions 
          (id, BranchCode, TransactionNo, InvoiceNo, Nature, RefVoucherNo, PartyInvNo, TransactionDate, GatePassNo, BranchSupplierCode, AccountCode, BookAccountCode, DiscountAccountCode, ItemDiscountAccountCode, SalesTaxAccountCode, ItemSTAccountCode, ItemAdditionalDiscountAccountCode, ItemFocGSTAccountCode, Description, DocumentReference, GrossAmount, DiscountP, Discount, SalesTaxP, SalesTax, NetAmount, UserId, IRSNoRef, PurchaserCode, IsSalesBasis, trDateTime, GUID, RecordNo, brcode_trno_nature, ICRefNo, created_at, updated_at, location_code, terms, dept_code, IsApproved) 
