@@ -721,3 +721,5 @@ function resetCopyButton() {
 selectQueryOption.addEventListener("input", resetCopyButton);
 
 copyToClip();
+
+console.log("test");
