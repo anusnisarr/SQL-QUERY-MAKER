@@ -266,7 +266,6 @@ input[type="submit"]:hover {
     overflow-wrap: break-word;
     
 }
-
 /* Responsive Design */
 @media (max-width: 500px) {
     .container {

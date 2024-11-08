@@ -16,11 +16,12 @@ let showbtnContainer = document.querySelector(".showbtnContainer")
 let showVhBtn = document.getElementById("showVhBtn");
 let numberofrows = document.querySelector(".noofrows");
 let numberQuery = 0;
-let secondQuery = "";
-let firstQuery = "";
+let master_inv_transactions = "";
+let detail_inv_transactions = "";
 let currentDate = new Date();
 let formatDate = '';
 let voucher_details = "";
+let voucher_masters = "";
 
 selectQueryOption.addEventListener("change", function () {
     if (selectQueryOption.value === "update-SaleRate") {
@@ -53,6 +54,7 @@ selectQueryOption.addEventListener("change", function () {
         document.getElementById("submit").addEventListener("click", function () {
             SalerateUpdateQuery();
         });
+
     }
 
     else if (selectQueryOption.value === "insertCustomer") {
@@ -166,6 +168,7 @@ selectQueryOption.addEventListener("change", function () {
                 <textarea class="purRateBox" placeholder="Paste Purchase Rate here..." wrap="soft"></textarea>
             </div>
             <input type="submit" id="submit">
+
         `;
 
         gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2", {
@@ -438,14 +441,36 @@ function customerInsertQuery() {
     }
 
     else {
-        copyBtn.textContent = "Copy to clipboard";
-        copyBtn.style.padding = "6px 8px";
+        showbtnContainer.innerHTML = `<button class="copyBtn" id="showBtn"></button>`;
+        showBtn.style.display = "flex";
         showBtn.textContent = "Show COA";
         showBtn.style.padding = "6px 8px";
+        copyBtn.textContent = "Copy to clipboard";
+        copyBtn.style.padding = "6px 8px";
         copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
         copyBtn.style.transition = "background-color 0.3s ease";
     }
-    showButton();
+    
+    let toggle = true;
+    showBtn.addEventListener("click", function(){
+        if(toggle === true){
+            showBtn.textContent = "Show Customer";
+            output.textContent = secondQuery;
+            copyBtn.textContent = "Copy to clipboard";
+            copyBtn.style.padding = "6px 8px";
+            copyBtn.style.backgroundColor = "#BB86FC";
+        }
+        else{
+            showBtn.textContent = "Show COA";
+            output.textContent = firstQuery;
+            copyBtn.textContent = "Copy to clipboard";
+            copyBtn.style.padding = "6px 8px";
+            copyBtn.style.backgroundColor = "#BB86FC";
+
+        }
+        console.log(toggle)
+        toggle = !toggle;
+    })
 };
 
 function grnInsertQuery() {
@@ -468,8 +493,7 @@ function grnInsertQuery() {
     let voucherNo = document.querySelector("#voucherNo");
     let supplierAcc = document.querySelector("#suppAcc");
 
-
-
+    let queryselect = document.querySelector("#queryselect")
 
     // Ensure that empty lines are filtered out
     // barcodesrray = barcodesrray.filter(barcode => barcode !== "");
@@ -506,13 +530,13 @@ function grnInsertQuery() {
         return;
     }
     // Create separate 'UPDATE' queries for each customer pair
-    let detail_inv_transactions = barcodesrray.map((barcode, index) => {
+    let firstQuery = barcodesrray.map((barcode, index) => {
         return `INSERT INTO detail_inv_transactions 
         (id, BranchCode, TransactionNo, Nature, PurchaseOrderNo, BarCode, UnitCode, po_quantity, Quantity, BonusQuantity, DemandQuantity, VarianceQty, RetailRate, NetRate, GrossRate, Rate, PurAvgRate, DiscountP, Discount, SalesTaxP, SalesTax, AdditionalDiscountOnGrossP, AdditionalDiscountOnGross, AdditionalDiscountOnAmountP, AdditionalDiscountOnAmount, FocGSTP, FocGST, Remarks, RecordNo, trDatetime, ExpiryDate, BatchNo, AlternateQty, AlternateRate, brcode_trno_nature, created_at, updated_at)
          VALUES (NULL, '${branchCode.value}', '00022/6St', '1', '', '${barcodesrray[index]}', '${unitCodeArray[index]}', '0.000', '${qtyArray}', '0.000', '0.000', '0.000', '0.000', '3400.0000', '0.0000', '${puRateArray}', '0.0000', '0.0000', '0.0000', '0.0000', '0.0000', '0.000', '0.000', '0.000', '0.000', '0.000', '0.000', '', '0', '${currentDate.toISOString().split('T')[0]} 00:00:00', '0000-00-00 00:00:00', '', '0.00', '0.00', '', '${currentDate.toISOString().split('T')[0]} 00:00:00', '${currentDate.toISOString().split('T')[0]} 00:00:00');`;
     });
 
-    let master_inv_transactions = barcodesrray.map((name, index) => {
+    let secondQuery = barcodesrray.map((name, index) => {
         return `INSERT INTO master_inv_transactions 
          (id, BranchCode, TransactionNo, InvoiceNo, Nature, RefVoucherNo, PartyInvNo, TransactionDate, GatePassNo, BranchSupplierCode, AccountCode, BookAccountCode, DiscountAccountCode, ItemDiscountAccountCode, SalesTaxAccountCode, ItemSTAccountCode, ItemAdditionalDiscountAccountCode, ItemFocGSTAccountCode, Description, DocumentReference, GrossAmount, DiscountP, Discount, SalesTaxP, SalesTax, NetAmount, UserId, IRSNoRef, PurchaserCode, IsSalesBasis, trDateTime, GUID, RecordNo, brcode_trno_nature, ICRefNo, created_at, updated_at, location_code, terms, dept_code, IsApproved) 
         VALUES (NULL, '${branchCode.value}', '00022/6St', '', '1', '${voucherNo.value}', '', '${formatDate} 00:00:00', '', '00001', '02-002-001-0001', '05-001-001-0001', '', '', '', '', '', '', '', '', '6800.00', '0.00', '0.00', '0.00', '0.00', '6800.00', '', '', '', '0', '${currentDate.toLocaleDateString('fr-CA')}00:00:00', '0', '0', '', '', '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', '0', NULL, NULL, '1');`
@@ -520,7 +544,7 @@ function grnInsertQuery() {
 
     let Amount = 0;
     let total = puRateArray.map((amount, index) => {
-         amount * qtyArray[index]
+        amount * qtyArray[index]
     });
 
     total.forEach(element => {
@@ -530,15 +554,15 @@ function grnInsertQuery() {
     console.log("Amount", total)
     console.log("Total Amount", Amount)
 
-voucher_details =
- `
+    voucher_details =
+        `
 INSERT INTO voucher_details
 (id, BranchCode, VoucherTypeCode, VoucherNo, AccountCode, CostCenterCode, CurrencyCode, CurrencyCurrentRate, Amount, Debit, Credit, ChequeNo, ChequeDate, BillRefNo, BillRefRemarks, Remarks, Description, RecordNo, DebitFC, CreditFC, deleted_at, created_at, updated_at, dumycheque, ChequeName, Costcentre_id)
 VALUES(727481, '${branchCode.value}', 'GRN', '${voucherNo.value}', '${supplierAcc.value}', '0', '0', 0.00, ${Amount}, 0.0000, ${Amount}, '', '0000-00-00 00:00:00', '${grnNo.value}', NULL, 'Goods Receive Note Voucher , ${formatDate} , ${grnNo.value}', '', '0', 0.0000, 0.0000, NULL, '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', NULL, NULL, 0);
 `
 
-voucher_masters =
-`
+    voucher_masters =
+        `
 INSERT INTO voucher_masters
 (id, BranchCode, VoucherTypeCode, VoucherNo, VoucherDate, Narration, BillRefNo, CreditDays, GUID, RecordNo, deleted_at, created_at, updated_at, IsSaleVoucher, created_by, ChequeName, VoucherStatus)
 VALUES(251191, '${branchCode.value}', 'GRN', '${voucherNo.value}', '${formatDate} 00:00:00', 'Goods Receive Note Voucher , ${formatDate} , ${grnNo.value}', '${grnNo.value}', '0', '0', '0', NULL, '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', '${currentDate.toLocaleDateString('fr-CA')} 00:00:00', 1, '46', NULL, 0);
@@ -546,17 +570,17 @@ VALUES(251191, '${branchCode.value}', 'GRN', '${voucherNo.value}', '${formatDate
 
 
     // Join all the queries with a newline character for output
-    firstQuery = detail_inv_transactions.join("\n");
+    detail_inv_transactions = firstQuery.join("\n");
 
     // Join all the queries with a newline character for output
-    secondQuery = master_inv_transactions.join("\n");
+    master_inv_transactions = secondQuery.join("\n");
 
     //SHOW COUNT OF NO OF ROWS
-    for (let i = 1; i <= detail_inv_transactions.length; i++) {
+    for (let i = 1; i <= firstQuery.length; i++) {
         numberQuery = i;
         numberofrows.textContent = "ROWS:" + numberQuery;
     }
-
+console.log
     // Output validation and displaying the query
     if (barcodes.value === "" && unitCode.value === "" && qty.value === "" && puRate.value === "") {
         output.textContent = "Please Paste Barcodes, Unit Code, Quantity, and Purchase Rate!";
@@ -624,77 +648,45 @@ VALUES(251191, '${branchCode.value}', 'GRN', '${voucherNo.value}', '${formatDate
         output.textContent === "The number of Barcodes and Quantities do not match!" ||
         output.textContent === "The number of Barcodes and Purchase Rates do not match!") {
 
-        showBtn.textContent = ""; // Clear the button text  
         copyBtn.textContent = ""; // Clear the button text
-        showBtn.style.padding = "0"; // Hide the button by removing padding
         copyBtn.style.padding = "0"; // Hide the button by removing padding
         numberofrows.textContent = ""; // Clear the number of rows count
 
     } else {
+        showbtnContainer.innerHTML = `
+        <select name="variance" id="queryselect">
+        <option id="queryoption"value="Inv Detail">Inv Detail</option>
+        <option  id="queryoption"value="Inv Master">Inv Master</option>
+        <option  id="queryoption"value="Voucher Detail"> Voucher Details </option>
+        <option id="queryoption" value="Voucher Master">Voucher Master</option>
+        </select>`
+        let queryselect = document.querySelector("#queryselect")
+        queryselect.style.fontSize = "11px";
+        queryselect.style.padding = '5px 9px 5px 1px';
+        showBtn.style.display = "none"
         copyBtn.textContent = "Copy to clipboard";
         copyBtn.style.padding = "6px 8px";
-        showBtn.textContent = "Show Master Query";
-        showBtn.style.padding = "6px 8px";
-        showVhBtn.textContent = "Show Voucher Master Query";
-        showVhBtn.style.padding = "6px 8px";
-        showVhBtn.style.padding = "6px 8px";
-        showVhBtn.style.marginTop = "8px";
         copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
         copyBtn.style.transition = "background-color 0.3s ease";
     }
-
-    showButton();
-
+    
 };
-
-let showButton = () => {
-    let toggle = true;  // Flag to track which query to display on button click
-    showVhBtn.addEventListener("click", function () {
-        if (toggle) {
-            showVhBtn.innerHTML = "Show Voucher Details Query";
-            output.textContent = voucher_masters;  // Show COA query
-            showBtn.innerHTML = "Show Details Query";
-
-        } else if (!toggle) {
-            showVhBtn.innerHTML = "Show Voucher Master Query";
+    
+showbtnContainer.addEventListener("change", function () {
+        if (queryselect.value === "Inv Master") {
+            output.textContent = master_inv_transactions;
+        }
+        else if (queryselect.value === "Inv Detail") {
+            output.textContent = detail_inv_transactions;
+        }
+        else if (queryselect.value === "Voucher Master") {
+            output.textContent = voucher_masters;
+        }
+        else if (queryselect.value === "Voucher Detail") {
             output.textContent = voucher_details;
+
         }
-      
-        toggle = !toggle;  // Toggle the flag on each click
-        copyBtn.innerHTML = "Copy to clipboard";
-        copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
-        copyBtn.style.transition = "background-color 0.3s ease";
-        console.log(toggle)
-    });
-
-    showBtn.addEventListener("click", function () {
-        if (selectQueryOption.value === "insertCustomer") {
-            if (toggle) {
-                showBtn.innerHTML = "Show Customer Query";
-                output.textContent = secondQuery;  // Show COA query
-            } else {
-                showBtn.innerHTML = "Show COA Query";
-                output.textContent = firstQuery;  // Show Final query
-            }
-        } else if (selectQueryOption.value === "InsertGRN") {
-            if (toggle) {
-                showBtn.innerHTML = "Show Details Query";
-                output.textContent = secondQuery;  // Show COA query
-            }else {
-                showBtn.innerHTML = "Show Master Query";
-                output.textContent = firstQuery;  // Show Final query
-                showVhBtn.innerHTML = "Show Voucher Master Query";
-            }
-        }
-        toggle = !toggle;  // Toggle the flag on each click
-        copyBtn.innerHTML = "Copy to clipboard";
-        copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
-        copyBtn.style.transition = "background-color 0.3s ease";
-        console.log(toggle)
-    });
-};
-
-
+    })
 const copyToClip = () => {
     copyBtn.addEventListener("click", function () {
         if (output.innerHTML != "") {
@@ -708,15 +700,15 @@ const copyToClip = () => {
 
 
 function resetCopyButton() {
-    showBtn.textContent = ""; // Clear the button text  
     copyBtn.textContent = ""; // Clear the button text
-    showBtn.style.padding = "0"; // Hide the button by removing padding
     copyBtn.style.padding = "0"; // Hide the button by removing padding
     output.textContent = ""; // Clear the output content
     numberofrows.textContent = ""; // Clear the number of rows count
+    showBtn.style.padding = "0"; // Hide the button by removing padding
+    showBtn.textContent = ""; // Clear the button text  
+    showbtnContainer.innerHTML = "";
+
 }
 selectQueryOption.addEventListener("input", resetCopyButton);
 
 copyToClip();
-
-console.log("fixed");
