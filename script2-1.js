@@ -719,5 +719,4 @@ selectQueryOption.addEventListener("input", resetCopyButton);
 
 copyToClip();
 
-console.log("test");
-console.log("test");
+console.log("Done");
