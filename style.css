@@ -266,6 +266,9 @@ input[type="submit"]:hover {
     overflow-wrap: break-word;
     
 }
+h2 {
+    outline: none; /* Removes the default outline */
+}
 /* Responsive Design */
 @media (max-width: 500px) {
     .container {

@@ -99,14 +99,14 @@ selectQueryOption.addEventListener("change", function () {
     else if (selectQueryOption.value === "update-SKU") {
         inputFeild.innerHTML = `
             <div class="headingInputSection1">
-                <h2>Table Name:</h2>
+                <h2>Table Name:<span>(EDITABLE)</span></h2>
             </div>
             <div class="inputsection1">
                 <input type='text' placeholder='tableName' id='tableName' value='items'>
             </div>
             <div class="headingInputSection2">
-                <h2>BARCODES:</h2>
-                <h2>SKU:</h2>
+                <h2 id="barcodedit" value="BARCODES:">BARCODES:<span>(EDITABLE)</span></h2>
+                <h2 id="skuedit" value="SKU:">SKU:<span>(EDITABLE)</span></h2>
             </div>
             <div class="inputsection2">
                 <textarea class='barcodeBox' placeholder='Paste Barcodes here...' wrap='soft'></textarea>
@@ -122,12 +122,43 @@ selectQueryOption.addEventListener("change", function () {
             opacity: 0,
             stagger: 0.05
         });
+        // make barcode heading editable feild
+        let editabletext = document.querySelectorAll("span")    
+        console.log(editabletext)
+        editabletext.forEach((text) =>{
+            text.style.fontSize = "0.9em"; // Slightly smaller than main text
+            text.style.color = "#666"; // Gray color
+            text.style.fontStyle = "italic"; // Italic for emphasis      
+        })
+
+        let headings = document.querySelectorAll("h2");        
+        headings.forEach((heading) => {
+            heading.addEventListener('dblclick', () => {
+                heading.contentEditable = 'true';
+                heading.focus();
+                // Function to handle click outside
+                function handleClickOutside(event) {
+                    if (!heading.contains(event.target)) {
+                        heading.contentEditable = 'false';  // Disable editing
+                        heading.value = heading.textContent 
+        
+                        // Remove the event listener once clicked outside
+                        document.removeEventListener('mousedown', handleClickOutside);
+                    }
+                }
+        
+                // Add the event listener to detect clicks outside
+                document.addEventListener('mousedown', handleClickOutside);
+            });
+        });
 
         // Reassign event listener after the DOM update
         document.getElementById("submit").addEventListener("click", function () {
             skuUpdateQuery();
         });
-    }
+
+
+}
 
     else if (selectQueryOption.value === "InsertGRN") {
         inputFeild.innerHTML = `
@@ -179,6 +210,8 @@ selectQueryOption.addEventListener("change", function () {
             stagger: 0.05
         });
 
+
+        
         // Reassign event listener after the DOM update
         document.getElementById("submit").addEventListener("click", function () {
             grnInsertQuery();
@@ -284,6 +317,9 @@ function skuUpdateQuery() {
     let valuesku = sku.value.trim(); // Remove extra spaces
     let skuArray = valuesku.split(/\n/).map(rate => rate.trim()); // Split and trim sale rates
 
+    let skuHeading = document.querySelector("#skuedit");
+    let barcodeHeading = document.querySelector("#barcodedit");
+
     // Ensure that empty lines are filtered out
     barcodesArray = barcodesArray.filter(barcode => barcode !== "");
     skuArray = skuArray.filter(rate => rate !== "");
@@ -298,7 +334,7 @@ function skuUpdateQuery() {
 
     // Create separate 'UPDATE' queries for each barcode-saleRate pair
     let formattedQueries = barcodesArray.map((barcode, index) => {
-        return `UPDATE ${tableName.value} SET SKU = ${skuArray[index]} WHERE barcode = '${barcode}';`;
+        return `UPDATE ${tableName.value} SET ${skuHeading.value||"sku"} = ${skuArray[index]} WHERE ${barcodeHeading.value||"barcode"} = '${barcode}';`;
     });
 
     // Join all the queries with a newline character for output
