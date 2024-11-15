@@ -99,14 +99,14 @@ selectQueryOption.addEventListener("change", function () {
     else if (selectQueryOption.value === "update-SKU") {
         inputFeild.innerHTML = `
             <div class="headingInputSection1">
-                <h2>Table Name:<span>(EDITABLE)</span></h2>
+                <h2>Table Name:</h2>
             </div>
             <div class="inputsection1">
                 <input type='text' placeholder='tableName' id='tableName' value='items'>
             </div>
             <div class="headingInputSection2">
-                <h2 id="barcodedit" value="BARCODES:">BARCODES:<span>(EDITABLE)</span></h2>
-                <h2 id="skuedit" value="SKU:">SKU:<span>(EDITABLE)</span></h2>
+                    <h2 id="barcodedit" value="BARCODES:">BARCODES<span>(EDITABLE)</span></h2>
+                <h2 id="skuedit" value="SKU:">SKU<span>(EDITABLE)</span></h2>
             </div>
             <div class="inputsection2">
                 <textarea class='barcodeBox' placeholder='Paste Barcodes here...' wrap='soft'></textarea>
@@ -123,18 +123,21 @@ selectQueryOption.addEventListener("change", function () {
             stagger: 0.05
         });
         // make barcode heading editable feild
-        let editabletext = document.querySelectorAll("span")    
-        console.log(editabletext)
-        editabletext.forEach((text) =>{
+        let editabletext = document.querySelectorAll("span")  
+
+            editabletext.forEach((text) =>{
+            text.contentEditable = "false";
             text.style.fontSize = "0.9em"; // Slightly smaller than main text
             text.style.color = "#666"; // Gray color
             text.style.fontStyle = "italic"; // Italic for emphasis      
         })
 
-        let headings = document.querySelectorAll("h2");        
+        let headings = document.querySelectorAll("h2"); 
         headings.forEach((heading) => {
             heading.addEventListener('dblclick', () => {
+                if(heading.textContent === "Table Name:") return;
                 heading.contentEditable = 'true';
+                heading.style.textTransform = "none";
                 heading.focus();
                 // Function to handle click outside
                 function handleClickOutside(event) {
@@ -334,7 +337,7 @@ function skuUpdateQuery() {
 
     // Create separate 'UPDATE' queries for each barcode-saleRate pair
     let formattedQueries = barcodesArray.map((barcode, index) => {
-        return `UPDATE ${tableName.value} SET ${skuHeading.value||"sku"} = ${skuArray[index]} WHERE ${barcodeHeading.value||"barcode"} = '${barcode}';`;
+        return `UPDATE ${tableName.value} SET ${skuHeading.childNodes[0].textContent||"sku"} = ${skuArray[index]} WHERE ${barcodeHeading.childNodes[0].textContent||"barcode"} = '${barcode}';`;
     });
 
     // Join all the queries with a newline character for output
@@ -407,6 +410,7 @@ function customerInsertQuery() {
 
     // Create separate 'UPDATE' queries for each customer pair
     let formattedQueries = nameArray.map((name, index) => {
+
         return `INSERT INTO ${tableName.value}(BranchCode, CustomerCode, Customer, Address, AreaCode, CityCode, PhoneNo, FaxNo, MobileNo, EmailID, GUID, RecordNo, created_at, updated_at, AreaId, DOB, gender, customer_category, AccountCode)
         VALUES ('${branchCode.value}','0101-${(accountnumber + index).toString().padStart(2, '0')}-0202','${nameArray[index]}','${addressArray[index]}','','','${phoneArray[index]}','','${phoneArray[index]}','',0,0,'${currentDate.toISOString().split('T')[0]} 00:00:00','${currentDate.toISOString().split('T')[0]} 00:00:00','0','0000-00-00 00:00:00','','','01-002-004-${(accountnumber + index).toString().padStart(4, '0')}');`
     });
