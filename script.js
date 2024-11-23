@@ -123,9 +123,9 @@ selectQueryOption.addEventListener("change", function () {
             stagger: 0.05
         });
         // make barcode heading editable feild
-        let editabletext = document.querySelectorAll("span")    
-        console.log(editabletext)
-        editabletext.forEach((text) =>{
+        let editabletitle = document.querySelectorAll("span")    
+        console.log(editabletitle)
+        editabletitle.forEach((text) =>{
             text.style.fontSize = "0.9em"; // Slightly smaller than main text
             text.style.color = "#666"; // Gray color
             text.style.fontStyle = "italic"; // Italic for emphasis      
@@ -282,28 +282,24 @@ function SalerateUpdateQuery() {
     // Output validation and displaying the query
     if (valueBarcodes === "" && valueSaleRate === "") {
         output.textContent = "Please Paste Data!";
+        resetCopyButton()
     } else if (valueBarcodes !== "" && valueSaleRate === "") {
         output.textContent = "Please Paste Sale Rate!";
+        resetCopyButton()
     } else if (valueBarcodes === "" && valueSaleRate !== "") {
         output.textContent = "Please Paste Barcode!";
+        resetCopyButton()
         // Handle case where the number of barcodes and sale rates do not match
     } else if (barcodesArray.length !== saleRateArray.length) {
         output.textContent = "The number of Barcodes and Sale Rates do not match!";
+        resetCopyButton()
     } else {
         output.textContent = firstQuery; // Display the generated SQL queries
-    }
-    // Clipboard Button validation and displaying
-    if (output.innerHTML === "" || output.textContent === "Please Paste Data!"
-        || output.textContent === "Please Paste Sale Rate!" || output.textContent === "Please Paste Barcode!" ||
-        output.textContent === "The number of Barcodes and Sale Rates do not match!") {
-    }
-
-    else {
         copyBtn.textContent = "Copy to clipboard";
         copyBtn.style.padding = "6px 8px";
         copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
         copyBtn.style.transition = "background-color 0.3s ease";
-    };
+    }
     console.log(firstQuery)
 };
 
@@ -334,7 +330,7 @@ function skuUpdateQuery() {
 
     // Create separate 'UPDATE' queries for each barcode-saleRate pair
     let formattedQueries = barcodesArray.map((barcode, index) => {
-        return `UPDATE ${tableName.value} SET ${skuHeading.value||"sku"} = ${skuArray[index]} WHERE ${barcodeHeading.value||"barcode"} = '${barcode}';`;
+        return `UPDATE ${tableName.value} SET ${skuHeading.value || "sku"} = ${skuArray[index]} WHERE ${barcodeHeading.value||"barcode"} = '${barcode}';`;
     });
 
     // Join all the queries with a newline character for output
@@ -348,28 +344,24 @@ function skuUpdateQuery() {
     // Output validation and displaying the query
     if (valueBarcodes === "" && valuesku === "") {
         output.textContent = "Please Paste Data!";
+        resetCopyButton()
     } else if (valueBarcodes !== "" && valuesku === "") {
         output.textContent = "Please Paste SKU!";
+        resetCopyButton()
     } else if (valueBarcodes === "" && valuesku !== "") {
         output.textContent = "Please Paste Barcode!";
+        resetCopyButton()
         // Handle case where the number of barcodes and sale rates do not match
     } else if (barcodesArray.length !== skuArray.length) {
         output.textContent = "The number of Barcodes and SKU do not match!";
+        resetCopyButton()
     } else {
         output.textContent = firstQuery; // Display the generated SQL queries
-    }
-    // Clipboard Button validation and displaying
-    if (output.innerHTML === "" || output.textContent === "Please Paste Data!"
-        || output.textContent === "Please Paste SKU!" || output.textContent === "Please Paste Barcode!" ||
-        output.textContent === "The number of Barcodes and SKU do not match!") {
-    }
-
-    else {
         copyBtn.textContent = "Copy to clipboard";
         copyBtn.style.padding = "6px 8px";
         copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
         copyBtn.style.transition = "background-color 0.3s ease";
-    };
+    }
 };
 
 //FOR CUSTOMER INSERT QUERY
@@ -432,51 +424,37 @@ function customerInsertQuery() {
     // Output validation and displaying the query
     if (names.value === "" && address.value === "" && phone.value === "") {
         output.textContent = "Please Paste Name, Address, and Phone!";
+        resetCopyButton()
     } else if (names.value === "" && address.value !== "" && phone.value === "") {
         output.textContent = "Please Paste Name and Phone!";
+        resetCopyButton()
     } else if (names.value === "" && address.value === "" && phone.value !== "") {
         output.textContent = "Please Paste Name and Address!";
+        resetCopyButton()
     } else if (names.value === "" && address.value !== "" && phone.value !== "") {
         output.textContent = "Please Paste Name!";
+        resetCopyButton()
     } else if (names.value !== "" && address.value === "" && phone.value === "") {
         output.textContent = "Please Paste Address and Phone!";
+        resetCopyButton()
     } else if (names.value !== "" && address.value === "" && phone.value !== "") {
         output.textContent = "Please Paste Address!";
+        resetCopyButton()
     } else if (names.value !== "" && address.value !== "" && phone.value === "") {
         output.textContent = "Please Paste Phone!";
+        resetCopyButton()
     } else if (nameArray.length !== addressArray.length && nameArray.length !== phoneArray.length) {
         output.textContent = "The No of Address and Phone do not match with Names";
+        resetCopyButton()
     } else if (nameArray.length == phoneArray.length && nameArray.length !== addressArray.length) {
         output.textContent = "The No of Address do not match with Names";
+        resetCopyButton()
     } else if ((nameArray.length == addressArray.length && nameArray.length !== phoneArray.length)) {
         output.textContent = "The No of phone do not match with Names";
+        resetCopyButton()
     }
     else {
         output.textContent = firstQuery; // Display the generated SQL queries
-    }
-
-
-    // Clipboard Button validation and displaying
-    if (output.innerHTML === "" ||
-        output.textContent === "Please Paste Data!" ||
-        output.textContent === "Please Paste Name, Address, and Phone!" ||
-        output.textContent === "Please Paste Name!" ||
-        output.textContent === "Please Paste Address!" ||
-        output.textContent === "Please Paste Phone!" ||
-        output.textContent === "Please Paste Name and Phone!" ||
-        output.textContent === "Please Paste Name and Address!" ||
-        output.textContent === "Please Paste Address and Phone!" ||
-        output.textContent === "The number of Names, Address, and Phone numbers do not match!") {
-
-        showBtn.textContent = ""; // Clear the button text  
-        copyBtn.textContent = ""; // Clear the button text
-        showBtn.style.padding = "0"; // Hide the button by removing padding
-        copyBtn.style.padding = "0"; // Hide the button by removing padding.
-        numberofrows.textContent = ""; // Clear the number of rows count
-
-    }
-
-    else {
         showbtnContainer.innerHTML = `<button class="copyBtn" id="showBtn"></button>`;
         showBtn.style.display = "flex";
         showBtn.textContent = "Show COA";
@@ -486,6 +464,38 @@ function customerInsertQuery() {
         copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
         copyBtn.style.transition = "background-color 0.3s ease";
     }
+
+
+    // // Clipboard Button validation and displaying
+    // if (output.innerHTML === "" ||
+    //     output.textContent === "Please Paste Data!" ||
+    //     output.textContent === "Please Paste Name, Address, and Phone!" ||
+    //     output.textContent === "Please Paste Name!" ||
+    //     output.textContent === "Please Paste Address!" ||
+    //     output.textContent === "Please Paste Phone!" ||
+    //     output.textContent === "Please Paste Name and Phone!" ||
+    //     output.textContent === "Please Paste Name and Address!" ||
+    //     output.textContent === "Please Paste Address and Phone!" ||
+    //     output.textContent === "The number of Names, Address, and Phone numbers do not match!") {
+
+    //     showBtn.textContent = ""; // Clear the button text  
+    //     copyBtn.textContent = ""; // Clear the button text
+    //     showBtn.style.padding = "0"; // Hide the button by removing padding
+    //     copyBtn.style.padding = "0"; // Hide the button by removing padding.
+    //     numberofrows.textContent = ""; // Clear the number of rows count
+
+    // }
+
+    // else {
+    //     showbtnContainer.innerHTML = `<button class="copyBtn" id="showBtn"></button>`;
+    //     showBtn.style.display = "flex";
+    //     showBtn.textContent = "Show COA";
+    //     showBtn.style.padding = "6px 8px";
+    //     copyBtn.textContent = "Copy to clipboard";
+    //     copyBtn.style.padding = "6px 8px";
+    //     copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
+    //     copyBtn.style.transition = "background-color 0.3s ease";
+    // }
     
     let toggle = true;
     showBtn.addEventListener("click", function(){
@@ -620,75 +630,64 @@ console.log
     // Output validation and displaying the query
     if (barcodes.value === "" && unitCode.value === "" && qty.value === "" && puRate.value === "") {
         output.textContent = "Please Paste Barcodes, Unit Code, Quantity, and Purchase Rate!";
+        resetCopyButton()
     } else if (barcodes.value === "" && unitCode.value !== "" && qty.value === "" && puRate.value === "") {
         output.textContent = "Please Paste Barcodes, Quantity, and Purchase Rate!";
+        resetCopyButton()
     } else if (barcodes.value === "" && unitCode.value === "" && qty.value !== "" && puRate.value === "") {
         output.textContent = "Please Paste Barcodes, Unit Code, and Purchase Rate!";
+        resetCopyButton()
     } else if (barcodes.value === "" && unitCode.value === "" && qty.value === "" && puRate.value !== "") {
         output.textContent = "Please Paste Barcodes, Unit Code, and Quantity!";
+        resetCopyButton()
     } else if (barcodes.value !== "" && unitCode.value === "" && qty.value === "" && puRate.value === "") {
         output.textContent = "Please Paste Unit Code, Quantity, and Purchase Rate!";
+        resetCopyButton()
     } else if (barcodes.value !== "" && unitCode.value !== "" && qty.value === "" && puRate.value === "") {
         output.textContent = "Please Paste Quantity and Purchase Rate!";
+        resetCopyButton()
     } else if (barcodes.value !== "" && unitCode.value === "" && qty.value !== "" && puRate.value === "") {
         output.textContent = "Please Paste Unit Code and Purchase Rate!";
+        resetCopyButton()
     } else if (barcodes.value !== "" && unitCode.value === "" && qty.value === "" && puRate.value !== "") {
         output.textContent = "Please Paste Unit Code and Quantity!";
+        resetCopyButton()
     } else if (barcodes.value !== "" && unitCode.value !== "" && qty.value !== "" && puRate.value === "") {
         output.textContent = "Please Paste Purchase Rate!";
+        resetCopyButton()
     } else if (barcodes.value !== "" && unitCode.value !== "" && qty.value === "" && puRate.value !== "") {
         output.textContent = "Please Paste Quantity!";
+        resetCopyButton()
     } else if (barcodes.value === "" && unitCode.value !== "" && qty.value !== "" && puRate.value !== "") {
         output.textContent = "Please Paste Barcodes!";
+        resetCopyButton()
     }
     // Check for blank lines in each variable
     else if (blankBarcodes === true) {
         output.textContent = "Remove blank barcode line!";
+        resetCopyButton()
     } else if (blankunitCode === true) {
         output.textContent = "Remove blank unit code line!";
+        resetCopyButton()
     } else if (blankqty === true) {
         output.textContent = "Remove blank quantity line!";
+        resetCopyButton()
     } else if (blankpuRate === true) {
         output.textContent = "Remove blank purchase rate line!";
+        resetCopyButton()
     }
     // Check for mismatched lengths between barcodes and other arrays
     else if (barcodesrray.length !== unitCodeArray.length) {
         output.textContent = "The number of Barcodes and Unit Codes do not match!";
+        resetCopyButton()
     } else if (barcodesrray.length !== qtyArray.length) {
         output.textContent = "The number of Barcodes and Quantities do not match!";
+        resetCopyButton()
     } else if (barcodesrray.length !== puRateArray.length) {
         output.textContent = "The number of Barcodes and Purchase Rates do not match!";
+        resetCopyButton()
     } else {
         output.textContent = firstQuery; // Display the generated SQL queries
-    }
-
-
-    // Copy/Show Button validation and displaying
-    if (output.innerHTML === "" ||
-        output.textContent === "Please Paste Barcodes, Unit Code, Quantity, and Purchase Rate!" ||
-        output.textContent === "Please Paste Barcodes, Quantity, and Purchase Rate!" ||
-        output.textContent === "Please Paste Barcodes, Unit Code, and Purchase Rate!" ||
-        output.textContent === "Please Paste Barcodes, Unit Code, and Quantity!" ||
-        output.textContent === "Please Paste Unit Code, Quantity, and Purchase Rate!" ||
-        output.textContent === "Please Paste Quantity and Purchase Rate!" ||
-        output.textContent === "Please Paste Unit Code and Purchase Rate!" ||
-        output.textContent === "Please Paste Unit Code and Quantity!" ||
-        output.textContent === "Please Paste Purchase Rate!" ||
-        output.textContent === "Please Paste Quantity!" ||
-        output.textContent === "Please Paste Barcodes!" ||
-        output.textContent === "Remove blank barcode line!" ||
-        output.textContent === "Remove blank unit code line!" ||
-        output.textContent === "Remove blank quantity line!" ||
-        output.textContent === "Remove blank purchase rate line!" ||
-        output.textContent === "The number of Barcodes and Unit Codes do not match!" ||
-        output.textContent === "The number of Barcodes and Quantities do not match!" ||
-        output.textContent === "The number of Barcodes and Purchase Rates do not match!") {
-
-        copyBtn.textContent = ""; // Clear the button text
-        copyBtn.style.padding = "0"; // Hide the button by removing padding
-        numberofrows.textContent = ""; // Clear the number of rows count
-
-    } else {
         showbtnContainer.innerHTML = `
         <select name="variance" id="queryselect">
         <option id="queryoption"value="Inv Detail">Inv Detail</option>
@@ -705,6 +704,50 @@ console.log
         copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
         copyBtn.style.transition = "background-color 0.3s ease";
     }
+
+
+    // Copy/Show Button validation and displaying
+    // if (output.innerHTML === "" ||
+    //     output.textContent === "Please Paste Barcodes, Unit Code, Quantity, and Purchase Rate!" ||
+    //     output.textContent === "Please Paste Barcodes, Quantity, and Purchase Rate!" ||
+    //     output.textContent === "Please Paste Barcodes, Unit Code, and Purchase Rate!" ||
+    //     output.textContent === "Please Paste Barcodes, Unit Code, and Quantity!" ||
+    //     output.textContent === "Please Paste Unit Code, Quantity, and Purchase Rate!" ||
+    //     output.textContent === "Please Paste Quantity and Purchase Rate!" ||
+    //     output.textContent === "Please Paste Unit Code and Purchase Rate!" ||
+    //     output.textContent === "Please Paste Unit Code and Quantity!" ||
+    //     output.textContent === "Please Paste Purchase Rate!" ||
+    //     output.textContent === "Please Paste Quantity!" ||
+    //     output.textContent === "Please Paste Barcodes!" ||
+    //     output.textContent === "Remove blank barcode line!" ||
+    //     output.textContent === "Remove blank unit code line!" ||
+    //     output.textContent === "Remove blank quantity line!" ||
+    //     output.textContent === "Remove blank purchase rate line!" ||
+    //     output.textContent === "The number of Barcodes and Unit Codes do not match!" ||
+    //     output.textContent === "The number of Barcodes and Quantities do not match!" ||
+    //     output.textContent === "The number of Barcodes and Purchase Rates do not match!") {
+
+    //     copyBtn.textContent = ""; // Clear the button text
+    //     copyBtn.style.padding = "0"; // Hide the button by removing padding
+    //     numberofrows.textContent = ""; // Clear the number of rows count
+
+    // } else {
+    //     showbtnContainer.innerHTML = `
+    //     <select name="variance" id="queryselect">
+    //     <option id="queryoption"value="Inv Detail">Inv Detail</option>
+    //     <option  id="queryoption"value="Inv Master">Inv Master</option>
+    //     <option  id="queryoption"value="Voucher Detail"> Voucher Details </option>
+    //     <option id="queryoption" value="Voucher Master">Voucher Master</option>
+    //     </select>`
+    //     let queryselect = document.querySelector("#queryselect")
+    //     queryselect.style.fontSize = "11px";
+    //     queryselect.style.padding = '5px 9px 5px 1px';
+    //     showBtn.style.display = "none"
+    //     copyBtn.textContent = "Copy to clipboard";
+    //     copyBtn.style.padding = "6px 8px";
+    //     copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
+    //     copyBtn.style.transition = "background-color 0.3s ease";
+    // }
     
 };
     
@@ -720,7 +763,6 @@ showbtnContainer.addEventListener("change", function () {
         }
         else if (queryselect.value === "Voucher Detail") {
             output.textContent = voucher_details;
-
         }
     })
 const copyToClip = () => {
@@ -736,13 +778,12 @@ const copyToClip = () => {
 
 
 function resetCopyButton() {
+    showbtnContainer.innerHTML = "";
+    numberofrows.textContent = ""; // Clear the number of rows count
     copyBtn.textContent = ""; // Clear the button text
     copyBtn.style.padding = "0"; // Hide the button by removing padding
-    output.textContent = ""; // Clear the output content
-    numberofrows.textContent = ""; // Clear the number of rows count
     showBtn.style.padding = "0"; // Hide the button by removing padding
     showBtn.textContent = ""; // Clear the button text  
-    showbtnContainer.innerHTML = "";
 
 }
 selectQueryOption.addEventListener("input", resetCopyButton);
