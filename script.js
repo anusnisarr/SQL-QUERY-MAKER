@@ -24,40 +24,39 @@ let voucher_details = "";
 let voucher_masters = "";
 
 selectQueryOption.addEventListener("change", function () {
-    if (selectQueryOption.value === "update-SaleRate") {
-        inputFeild.innerHTML = `
-            <div class="headingInputSection1">
-               <h2>Table Name</h2>
-           </div>
-            <div class="inputsection1">
-               <input type = 'text' placeholder = 'tableName' id = 'tableName' value = 'items'>
-            </div>
-            <div class="headingInputSection2">
-                <h2>BARCODES:</h2>
-                <h2>SALE_RATE:</h2>
-            </div>
-            <div class="inputsection2">
-                <textarea class='barcodeBox' placeholder='Paste Barcodes here...' wrap='soft'></textarea>
-                <textarea class='saleRateBox' placeholder='Paste Sales here...' wrap='soft'></textarea>
-            </div>
-            <input type="submit" id="submit">
-        `;
-        gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2", {
-            x: -25,
-            delay: 0.05,
-            duration: 0.4,
-            opacity: 0,
-            stagger: 0.05
-        });
+    // if (selectQueryOption.value === "update-SaleRate") {
+    //     inputFeild.innerHTML = `
+    //         <div class="headingInputSection1">
+    //            <h2>Table Name</h2>
+    //        </div>
+    //         <div class="inputsection1">
+    //            <input type = 'text' placeholder = 'tableName' id = 'tableName' value = 'items'>
+    //         </div>
+    //         <div class="headingInputSection2">
+    //             <h2>BARCODES:</h2>
+    //             <h2>SALE_RATE:</h2>
+    //         </div>
+    //         <div class="inputsection2">
+    //             <textarea class='barcodeBox' placeholder='Paste Barcodes here...' wrap='soft'></textarea>
+    //             <textarea class='saleRateBox' placeholder='Paste Sales here...' wrap='soft'></textarea>
+    //         </div>
+    //         <input type="submit" id="submit">
+    //     `;
+    //     gsap.from(".headingInputSection1, .inputsection1, .headingInputSection2, .inputsection2", {
+    //         x: -25,
+    //         delay: 0.05,
+    //         duration: 0.4,
+    //         opacity: 0,
+    //         stagger: 0.05
+    //     });
 
-        // Reassign event listener after the DOM update
-        document.getElementById("submit").addEventListener("click", function () {
-            SalerateUpdateQuery();
-        });
+    //     // Reassign event listener after the DOM update
+    //     document.getElementById("submit").addEventListener("click", function () {
+    //         SalerateUpdateQuery();
+    //     });
 
-    }
-
-    else if (selectQueryOption.value === "insertCustomer") {
+    // }
+    if (selectQueryOption.value === "insertCustomer") {
         inputFeild.innerHTML = `
             <div class="headingInputSection1">
                 <h2>Table Name:</h2>
@@ -96,7 +95,7 @@ selectQueryOption.addEventListener("change", function () {
         });
     }
 
-    else if (selectQueryOption.value === "update-SKU") {
+    else if (selectQueryOption.value === "Update") {
         inputFeild.innerHTML = `
             <div class="headingInputSection1">
                 <h2>Table Name:</h2>
@@ -104,14 +103,43 @@ selectQueryOption.addEventListener("change", function () {
             <div class="inputsection1">
                 <input type='text' placeholder='tableName' id='tableName' value='items'>
             </div>
-            <div class="headingInputSection2">
-                    <h2 id="barcodedit" value="BARCODES:">BARCODES<span>(EDITABLE)</span></h2>
-                <h2 id="skuedit" value="SKU:">SKU<span>(EDITABLE)</span></h2>
+            <div class="inputContainer2">
+                <div class="inputGroup2">
+                    <div class="headingInputSection2">
+                        <h2 id="barcodedit" value="BARCODES:">BARCODES<span>(EDITABLE)</span></h2>
+                    </div>
+                    <div class="inputsection2">
+                        <textarea
+                            class="barcodeBox"
+                            placeholder="Paste Barcodes here..."
+                            wrap="soft"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <div class="inputGroup2">
+                    <div class="headingInputSection2">
+                        <h2 id="skuedit" value="SKU:">SKU<span>(EDITABLE)</span></h2>
+                    </div>
+                    <div class="inputsection2">
+                        <textarea
+                            class="skuBox"
+                            placeholder="Paste SKU here..."
+                            wrap="soft"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <div class="addMoreInputDiv">
+                    <button id="addMoreInputBtn">+</button>
+                </div>
+
             </div>
-            <div class="inputsection2">
-                <textarea class='barcodeBox' placeholder='Paste Barcodes here...' wrap='soft'></textarea>
-                <textarea class='skuBox' placeholder='Paste SKU here...' wrap='soft'></textarea>
-            </div>
+                    <div class="popup">
+            <label for="name">Enter Name:</label>
+            <input type="text" id="name" placeholder="Type here...">
+            <button class="close-btn">Close</button>
+        </div>
             <input type="submit" id="submit">
         `;
 
@@ -123,19 +151,19 @@ selectQueryOption.addEventListener("change", function () {
             stagger: 0.05
         });
         // make barcode heading editable feild
-        let editabletext = document.querySelectorAll("span")  
+        let editabletext = document.querySelectorAll("span")
 
-            editabletext.forEach((text) =>{
+        editabletext.forEach((text) => {
             text.contentEditable = "false";
             text.style.fontSize = "0.9em"; // Slightly smaller than main text
             text.style.color = "#666"; // Gray color
             text.style.fontStyle = "italic"; // Italic for emphasis      
         })
 
-        let headings = document.querySelectorAll("h2"); 
+        let headings = document.querySelectorAll("h2");
         headings.forEach((heading) => {
             heading.addEventListener('dblclick', () => {
-                if(heading.textContent === "Table Name:") return;
+                if (heading.textContent === "Table Name:") return;
                 heading.contentEditable = 'true';
                 heading.style.textTransform = "none";
                 heading.focus();
@@ -143,25 +171,50 @@ selectQueryOption.addEventListener("change", function () {
                 function handleClickOutside(event) {
                     if (!heading.contains(event.target)) {
                         heading.contentEditable = 'false';  // Disable editing
-                        heading.value = heading.textContent 
-        
-                        // Remove the event listener once clicked outside
+                        heading.value = heading.textContent
+
+                        // Remove the event listener uuonce clicked outside
                         document.removeEventListener('mousedown', handleClickOutside);
                     }
                 }
-        
+
                 // Add the event listener to detect clicks outside
                 document.addEventListener('mousedown', handleClickOutside);
             });
         });
+        let AddFeildsBtn = document.querySelector("#addMoreInputBtn")
+        const popup = document.querySelector(".popup");
 
-        // Reassign event listener after the DOM update
-        document.getElementById("submit").addEventListener("click", function () {
-            skuUpdateQuery();
+        function updateElementPosition() {
+            const rect = AddFeildsBtn.getBoundingClientRect();
+            popup.style.top = `${rect.y + 18}px`;
+            popup.style.left = `${rect.x + 11}px`;
+            console.log(`Element X: ${rect.x}, Element Y: ${rect.y}`);
+        }
+
+        window.addEventListener('resize', updateElementPosition);
+            
+        AddFeildsBtn.addEventListener("click", (e) => {
+            console.log(e.clientX);
+            console.log(e.clientY);
+            const rect = AddFeildsBtn.getBoundingClientRect();
+            console.log(`Element X: ${rect.x}, Element Y: ${rect.y}`);
+            
+            popup.style.display = "block";
+            popup.style.top = `${e.clientY + 5}px`;
+            popup.style.left = `${e.clientX + 5}px`;
+            
         });
 
 
-}
+        // Reassign event listener after the DOM update
+        document.getElementById("submit").addEventListener("click", function () {
+            Update();
+        });
+
+
+
+    }
 
     else if (selectQueryOption.value === "InsertGRN") {
         inputFeild.innerHTML = `
@@ -214,7 +267,7 @@ selectQueryOption.addEventListener("change", function () {
         });
 
 
-        
+
         // Reassign event listener after the DOM update
         document.getElementById("submit").addEventListener("click", function () {
             grnInsertQuery();
@@ -249,69 +302,69 @@ selectQueryOption.addEventListener("change", function () {
 });
 
 //FOR SALE RATE UPDATE QUERY
-function SalerateUpdateQuery() {
-    let barcodes = document.querySelector(".barcodeBox");
-    let valueBarcodes = barcodes.value.trim(); // Remove extra spaces
-    let barcodesArray = valueBarcodes.split(/\n/).map(barcode => barcode.trim()); // Split and trim barcodes
+// function SalerateUpdateQuery() {
+//     let barcodes = document.querySelector(".barcodeBox");
+//     let valueBarcodes = barcodes.value.trim(); // Remove extra spaces
+//     let barcodesArray = valueBarcodes.split(/\n/).map(barcode => barcode.trim()); // Split and trim barcodes
 
-    let saleRate = document.querySelector(".saleRateBox");
-    let valueSaleRate = saleRate.value.trim(); // Remove extra spaces
-    let saleRateArray = valueSaleRate.split(/\n/).map(rate => rate.trim()); // Split and trim sale rates
+//     let saleRate = document.querySelector(".saleRateBox");
+//     let valueSaleRate = saleRate.value.trim(); // Remove extra spaces
+//     let saleRateArray = valueSaleRate.split(/\n/).map(rate => rate.trim()); // Split and trim sale rates
 
-    // Ensure that empty lines are filtered out
-    barcodesArray = barcodesArray.filter(barcode => barcode !== "");
-    saleRateArray = saleRateArray.filter(rate => rate !== "");
+//     // Ensure that empty lines are filtered out
+//     barcodesArray = barcodesArray.filter(barcode => barcode !== "");
+//     saleRateArray = saleRateArray.filter(rate => rate !== "");
 
-    // Ensure tableName is provided
-    let tableName = document.querySelector("#tableName");
-    if (tableName.value.trim() === "") {
-        output.textContent = "Please provide a table name!";
-        return;
-    }
+//     // Ensure tableName is provided
+//     let tableName = document.querySelector("#tableName");
+//     if (tableName.value.trim() === "") {
+//         output.textContent = "Please provide a table name!";
+//         return;
+//     }
 
-    // Create separate 'UPDATE' queries for each barcode-saleRate pair
-    let formattedQueries = barcodesArray.map((barcode, index) => {
-        return `UPDATE ${tableName.value} SET sale_rate = ${saleRateArray[index]} WHERE barcode = '${barcode}';`;
-    });
+//     // Create separate 'UPDATE' queries for each barcode-saleRate pair
+//     let formattedQueries = barcodesArray.map((barcode, index) => {
+//         return `UPDATE ${tableName.value} SET sale_rate = ${saleRateArray[index]} WHERE barcode = '${barcode}';`;
+//     });
 
-    // Join all the queries with a newline character for output
-    firstQuery = formattedQueries.join("\n");
+//     // Join all the queries with a newline character for output
+//     firstQuery = formattedQueries.join("\n");
 
-    for (let i = 1; i <= formattedQueries.length; i++) {
-        numberQuery = i;
-        numberofrows.textContent = "ROWS:" + numberQuery;
-    }
+//     for (let i = 1; i <= formattedQueries.length; i++) {
+//         numberQuery = i;
+//         numberofrows.textContent = "ROWS:" + numberQuery;
+//     }
 
-    // Output validation and displaying the query
-    if (valueBarcodes === "" && valueSaleRate === "") {
-        output.textContent = "Please Paste Data!";
-    } else if (valueBarcodes !== "" && valueSaleRate === "") {
-        output.textContent = "Please Paste Sale Rate!";
-    } else if (valueBarcodes === "" && valueSaleRate !== "") {
-        output.textContent = "Please Paste Barcode!";
-        // Handle case where the number of barcodes and sale rates do not match
-    } else if (barcodesArray.length !== saleRateArray.length) {
-        output.textContent = "The number of Barcodes and Sale Rates do not match!";
-    } else {
-        output.textContent = firstQuery; // Display the generated SQL queries
-    }
-    // Clipboard Button validation and displaying
-    if (output.innerHTML === "" || output.textContent === "Please Paste Data!"
-        || output.textContent === "Please Paste Sale Rate!" || output.textContent === "Please Paste Barcode!" ||
-        output.textContent === "The number of Barcodes and Sale Rates do not match!") {
-    }
+//     // Output validation and displaying the query
+//     if (valueBarcodes === "" && valueSaleRate === "") {
+//         output.textContent = "Please Paste Data!";
+//     } else if (valueBarcodes !== "" && valueSaleRate === "") {
+//         output.textContent = "Please Paste Sale Rate!";
+//     } else if (valueBarcodes === "" && valueSaleRate !== "") {
+//         output.textContent = "Please Paste Barcode!";
+//         // Handle case where the number of barcodes and sale rates do not match
+//     } else if (barcodesArray.length !== saleRateArray.length) {
+//         output.textContent = "The number of Barcodes and Sale Rates do not match!";
+//     } else {
+//         output.textContent = firstQuery; // Display the generated SQL queries
+//     }
+//     // Clipboard Button validation and displaying
+//     if (output.innerHTML === "" || output.textContent === "Please Paste Data!"
+//         || output.textContent === "Please Paste Sale Rate!" || output.textContent === "Please Paste Barcode!" ||
+//         output.textContent === "The number of Barcodes and Sale Rates do not match!") {
+//     }
 
-    else {
-        copyBtn.textContent = "Copy to clipboard";
-        copyBtn.style.padding = "6px 8px";
-        copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
-        copyBtn.style.transition = "background-color 0.3s ease";
-    };
-    console.log(firstQuery)
-};
+//     else {
+//         copyBtn.textContent = "Copy to clipboard";
+//         copyBtn.style.padding = "6px 8px";
+//         copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
+//         copyBtn.style.transition = "background-color 0.3s ease";
+//     };
+//     console.log(firstQuery)
+// };
 
 //FOR SALE RATE UPDATE QUERY
-function skuUpdateQuery() {
+function Update() {
     let barcodes = document.querySelector(".barcodeBox");
     let valueBarcodes = barcodes.value.trim(); // Remove extra spaces
     let barcodesArray = valueBarcodes.split(/\n/).map(barcode => barcode.trim()); // Split and trim barcodes
@@ -336,12 +389,15 @@ function skuUpdateQuery() {
     }
 
     // Create separate 'UPDATE' queries for each barcode-saleRate pair
-    let formattedQueries = barcodesArray.map((barcode, index) => {
-        return `UPDATE ${tableName.value} SET ${skuHeading.childNodes[0].textContent||"sku"} = ${skuArray[index]} WHERE ${barcodeHeading.childNodes[0].textContent||"barcode"} = '${barcode}';`;
-    });
+        let formattedQueries = barcodesArray.map((barcode, index) => {
+            return `UPDATE ${tableName.value} SET ${skuHeading.childNodes[0].textContent || "sku"} = ${skuArray[index]} WHERE ${barcodeHeading.childNodes[0].textContent || "barcode"} = '${barcode}';`;
+        });
 
+    console.log(formattedQueries);
+    
     // Join all the queries with a newline character for output
     firstQuery = formattedQueries.join("\n");
+    console.log(firstQuery.trim(" "));
 
     for (let i = 1; i <= formattedQueries.length; i++) {
         numberQuery = i;
@@ -490,17 +546,17 @@ function customerInsertQuery() {
         copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
         copyBtn.style.transition = "background-color 0.3s ease";
     }
-    
+
     let toggle = true;
-    showBtn.addEventListener("click", function(){
-        if(toggle === true){
+    showBtn.addEventListener("click", function () {
+        if (toggle === true) {
             showBtn.textContent = "Show Customer";
             output.textContent = secondQuery;
             copyBtn.textContent = "Copy to clipboard";
             copyBtn.style.padding = "6px 8px";
             copyBtn.style.backgroundColor = "#BB86FC";
         }
-        else{
+        else {
             showBtn.textContent = "Show COA";
             output.textContent = firstQuery;
             copyBtn.textContent = "Copy to clipboard";
@@ -620,7 +676,7 @@ VALUES(251191, '${branchCode.value}', 'GRN', '${voucherNo.value}', '${formatDate
         numberQuery = i;
         numberofrows.textContent = "ROWS:" + numberQuery;
     }
-console.log
+    console.log
     // Output validation and displaying the query
     if (barcodes.value === "" && unitCode.value === "" && qty.value === "" && puRate.value === "") {
         output.textContent = "Please Paste Barcodes, Unit Code, Quantity, and Purchase Rate!";
@@ -709,24 +765,24 @@ console.log
         copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
         copyBtn.style.transition = "background-color 0.3s ease";
     }
-    
-};
-    
-showbtnContainer.addEventListener("change", function () {
-        if (queryselect.value === "Inv Master") {
-            output.textContent = master_inv_transactions;
-        }
-        else if (queryselect.value === "Inv Detail") {
-            output.textContent = detail_inv_transactions;
-        }
-        else if (queryselect.value === "Voucher Master") {
-            output.textContent = voucher_masters;
-        }
-        else if (queryselect.value === "Voucher Detail") {
-            output.textContent = voucher_details;
 
-        }
-    })
+};
+
+showbtnContainer.addEventListener("change", function () {
+    if (queryselect.value === "Inv Master") {
+        output.textContent = master_inv_transactions;
+    }
+    else if (queryselect.value === "Inv Detail") {
+        output.textContent = detail_inv_transactions;
+    }
+    else if (queryselect.value === "Voucher Master") {
+        output.textContent = voucher_masters;
+    }
+    else if (queryselect.value === "Voucher Detail") {
+        output.textContent = voucher_details;
+
+    }
+})
 const copyToClip = () => {
     copyBtn.addEventListener("click", function () {
         if (output.innerHTML != "") {
@@ -752,3 +808,6 @@ function resetCopyButton() {
 selectQueryOption.addEventListener("input", resetCopyButton);
 
 copyToClip();
+
+
+
