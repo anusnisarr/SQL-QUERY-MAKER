@@ -1,0 +1,3 @@
+[submodule "SQL-QUERY-MAKER"]
+	path = SQL-QUERY-MAKER
+	url = https://github.com/anusnisarr/SQL-QUERY-MAKER
