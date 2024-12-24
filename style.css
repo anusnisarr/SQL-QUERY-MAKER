@@ -59,6 +59,7 @@ body {
     color: #BB86FC;
     text-transform: uppercase;
     letter-spacing: 1px;
+    display: flex;
 }
 
 .headingInputSection1 {
