@@ -335,7 +335,6 @@ selectQueryOption.addEventListener("change", function () {
 //         numberofrows.textContent = "ROWS:" + numberQuery;
 //     }
 
-<<<<<<< HEAD
 //     // Output validation and displaying the query
 //     if (valueBarcodes === "" && valueSaleRate === "") {
 //         output.textContent = "Please Paste Data!";
@@ -363,31 +362,6 @@ selectQueryOption.addEventListener("change", function () {
 //     };
 //     console.log(firstQuery)
 // };
-=======
-    // Output validation and displaying the query
-    if (valueBarcodes === "" && valueSaleRate === "") {
-        output.textContent = "Please Paste Data!";
-        resetCopyButton()
-    } else if (valueBarcodes !== "" && valueSaleRate === "") {
-        output.textContent = "Please Paste Sale Rate!";
-        resetCopyButton()
-    } else if (valueBarcodes === "" && valueSaleRate !== "") {
-        output.textContent = "Please Paste Barcode!";
-        resetCopyButton()
-        // Handle case where the number of barcodes and sale rates do not match
-    } else if (barcodesArray.length !== saleRateArray.length) {
-        output.textContent = "The number of Barcodes and Sale Rates do not match!";
-        resetCopyButton()
-    } else {
-        output.textContent = firstQuery; // Display the generated SQL queries
-        copyBtn.textContent = "Copy to clipboard";
-        copyBtn.style.padding = "6px 8px";
-        copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
-        copyBtn.style.transition = "background-color 0.3s ease";
-    }
-    console.log(firstQuery)
-};
->>>>>>> fdcfb7f629a3a05447a2da4141b8ebb329b486ec
 
 //FOR SALE RATE UPDATE QUERY
 function Update() {
@@ -555,41 +529,6 @@ function customerInsertQuery() {
         copyBtn.style.transition = "background-color 0.3s ease";
     }
 
-<<<<<<< HEAD
-=======
-
-    // // Clipboard Button validation and displaying
-    // if (output.innerHTML === "" ||
-    //     output.textContent === "Please Paste Data!" ||
-    //     output.textContent === "Please Paste Name, Address, and Phone!" ||
-    //     output.textContent === "Please Paste Name!" ||
-    //     output.textContent === "Please Paste Address!" ||
-    //     output.textContent === "Please Paste Phone!" ||
-    //     output.textContent === "Please Paste Name and Phone!" ||
-    //     output.textContent === "Please Paste Name and Address!" ||
-    //     output.textContent === "Please Paste Address and Phone!" ||
-    //     output.textContent === "The number of Names, Address, and Phone numbers do not match!") {
-
-    //     showBtn.textContent = ""; // Clear the button text  
-    //     copyBtn.textContent = ""; // Clear the button text
-    //     showBtn.style.padding = "0"; // Hide the button by removing padding
-    //     copyBtn.style.padding = "0"; // Hide the button by removing padding.
-    //     numberofrows.textContent = ""; // Clear the number of rows count
-
-    // }
-
-    // else {
-    //     showbtnContainer.innerHTML = `<button class="copyBtn" id="showBtn"></button>`;
-    //     showBtn.style.display = "flex";
-    //     showBtn.textContent = "Show COA";
-    //     showBtn.style.padding = "6px 8px";
-    //     copyBtn.textContent = "Copy to clipboard";
-    //     copyBtn.style.padding = "6px 8px";
-    //     copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
-    //     copyBtn.style.transition = "background-color 0.3s ease";
-    // }
-    
->>>>>>> fdcfb7f629a3a05447a2da4141b8ebb329b486ec
     let toggle = true;
     showBtn.addEventListener("click", function () {
         if (toggle === true) {
@@ -798,7 +737,6 @@ VALUES(251191, '${branchCode.value}', 'GRN', '${voucherNo.value}', '${formatDate
         copyBtn.style.transition = "background-color 0.3s ease";
     }
 
-<<<<<<< HEAD
 };
 
 showbtnContainer.addEventListener("change", function () {
@@ -816,68 +754,6 @@ showbtnContainer.addEventListener("change", function () {
 
     }
 })
-=======
-
-    // Copy/Show Button validation and displaying
-    // if (output.innerHTML === "" ||
-    //     output.textContent === "Please Paste Barcodes, Unit Code, Quantity, and Purchase Rate!" ||
-    //     output.textContent === "Please Paste Barcodes, Quantity, and Purchase Rate!" ||
-    //     output.textContent === "Please Paste Barcodes, Unit Code, and Purchase Rate!" ||
-    //     output.textContent === "Please Paste Barcodes, Unit Code, and Quantity!" ||
-    //     output.textContent === "Please Paste Unit Code, Quantity, and Purchase Rate!" ||
-    //     output.textContent === "Please Paste Quantity and Purchase Rate!" ||
-    //     output.textContent === "Please Paste Unit Code and Purchase Rate!" ||
-    //     output.textContent === "Please Paste Unit Code and Quantity!" ||
-    //     output.textContent === "Please Paste Purchase Rate!" ||
-    //     output.textContent === "Please Paste Quantity!" ||
-    //     output.textContent === "Please Paste Barcodes!" ||
-    //     output.textContent === "Remove blank barcode line!" ||
-    //     output.textContent === "Remove blank unit code line!" ||
-    //     output.textContent === "Remove blank quantity line!" ||
-    //     output.textContent === "Remove blank purchase rate line!" ||
-    //     output.textContent === "The number of Barcodes and Unit Codes do not match!" ||
-    //     output.textContent === "The number of Barcodes and Quantities do not match!" ||
-    //     output.textContent === "The number of Barcodes and Purchase Rates do not match!") {
-
-    //     copyBtn.textContent = ""; // Clear the button text
-    //     copyBtn.style.padding = "0"; // Hide the button by removing padding
-    //     numberofrows.textContent = ""; // Clear the number of rows count
-
-    // } else {
-    //     showbtnContainer.innerHTML = `
-    //     <select name="variance" id="queryselect">
-    //     <option id="queryoption"value="Inv Detail">Inv Detail</option>
-    //     <option  id="queryoption"value="Inv Master">Inv Master</option>
-    //     <option  id="queryoption"value="Voucher Detail"> Voucher Details </option>
-    //     <option id="queryoption" value="Voucher Master">Voucher Master</option>
-    //     </select>`
-    //     let queryselect = document.querySelector("#queryselect")
-    //     queryselect.style.fontSize = "11px";
-    //     queryselect.style.padding = '5px 9px 5px 1px';
-    //     showBtn.style.display = "none"
-    //     copyBtn.textContent = "Copy to clipboard";
-    //     copyBtn.style.padding = "6px 8px";
-    //     copyBtn.style.backgroundColor = "#BB86FC"; // Reset to the original color
-    //     copyBtn.style.transition = "background-color 0.3s ease";
-    // }
-    
-};
-    
-showbtnContainer.addEventListener("change", function () {
-        if (queryselect.value === "Inv Master") {
-            output.textContent = master_inv_transactions;
-        }
-        else if (queryselect.value === "Inv Detail") {
-            output.textContent = detail_inv_transactions;
-        }
-        else if (queryselect.value === "Voucher Master") {
-            output.textContent = voucher_masters;
-        }
-        else if (queryselect.value === "Voucher Detail") {
-            output.textContent = voucher_details;
-        }
-    })
->>>>>>> fdcfb7f629a3a05447a2da4141b8ebb329b486ec
 const copyToClip = () => {
     copyBtn.addEventListener("click", function () {
         if (output.innerHTML != "") {
