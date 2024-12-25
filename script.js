@@ -239,7 +239,7 @@ selectQueryOption.addEventListener("change", function () {
       newColumn.className = "inputGroup2";
       newColumn.innerHTML = `
       <div class="headingInputSection2">
-        <h2 contenteditable="true" id="${columnNameInput.value}">${columnNameInput.value}</h2>
+        <h2 contenteditable="true" id="addColumnHeading">${columnNameInput.value}</h2>
       </div>
       <div class="inputsection2">
         <textarea class="newColumn" placeholder="Paste ${columnNameInput.value} here..." wrap="soft"></textarea>
@@ -418,6 +418,8 @@ function Update() {
 
   let skuHeading = document.querySelector("#skuedit");
   let barcodeHeading = document.querySelector("#barcodedit");
+  let newColumnHeading = document.querySelector("#addColumnHeading");
+
 
   if (newColumnArray !== null) {
     let newColumnValues = newColumnArray.value.trim(); // Remove extra spaces
@@ -446,7 +448,7 @@ function Update() {
     formattedQueries = barcodesArray.map((barcode, index) => {
       return `UPDATE ${tableName.value} SET ${
         skuHeading.childNodes[0].textContent || "sku"
-      } = '${skuArray[index]}','${NewValuesArray[index]}' WHERE ${
+      } = '${skuArray[index]}', ${newColumnHeading.textContent} = '${NewValuesArray[index]}' WHERE ${
         barcodeHeading.childNodes[0].textContent || "barcode"
       } = '${barcode}';`;
     });
