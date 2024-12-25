@@ -57,7 +57,7 @@ body {
 .headingInputSection2 {
     font-size: 10px; /* Adjust font size */
     color: #BB86FC;
-    text-transform: uppercase;
+    /* text-transform: uppercase; */
     letter-spacing: 1px;
     display: flex;
 }

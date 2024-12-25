@@ -22,6 +22,7 @@ let currentDate = new Date();
 let formatDate = "";
 let voucher_details = "";
 let voucher_masters = "";
+let newColumnArray = null;
 
 selectQueryOption.addEventListener("change", function () {
   // if (selectQueryOption.value === "update-SaleRate") {
@@ -218,25 +219,26 @@ selectQueryOption.addEventListener("change", function () {
     });
 
     // When New column is added
+    const ColumnContainer = document.querySelector(".inputContainer2");
     const addColumnBtn = document.querySelector("#addColumnBtn");
-    const columnName = document.querySelector("#name");
-    const AddMoreColumnSign = document.querySelector(".addMoreInputDiv");
+    const columnNameInput = document.querySelector("#name");
+    const plusButton = document.querySelector(".addMoreInputDiv");
 
     addColumnBtn.addEventListener("click", () => {
-      const ColumnContainer = document.querySelector(".inputContainer2");
       let newColumn = document.createElement("div");
       newColumn.className = "inputGroup2";
       newColumn.innerHTML = `
-        <div class="headingInputSection2">
-            <h2>${columnName.value}</h2>
-        </div>
-        <div class="inputsection2">
-            <textarea class="newColumn" placeholder="Paste ${columnName.value} here..." wrap="soft"></textarea>
-        </div>
+      <div class="headingInputSection2">
+        <h2 id="${columnNameInput.value}">${columnNameInput.value}</h2>
+      </div>
+      <div class="inputsection2">
+        <textarea class="newColumn" placeholder="Paste ${columnNameInput.value} here..." wrap="soft"></textarea>
+      </div>
       `;
+      let newColumnElement = newColumn.querySelector(".newColumn");
+      newColumnArray = newColumnElement;
       ColumnContainer.appendChild(newColumn);
-      ColumnContainer.insertBefore(newColumn, AddMoreColumnSign);
-
+      ColumnContainer.insertBefore(newColumn, plusButton);     
     });
 
     // Reassign event listener after the DOM update
@@ -328,7 +330,7 @@ selectQueryOption.addEventListener("change", function () {
   }
 });
 
-//FOR SALE RATE UPDATE QUERY
+//FOR UPDATE QUERY
 // function SalerateUpdateQuery() {
 //     let barcodes = document.querySelector(".barcodeBox");
 //     let valueBarcodes = barcodes.value.trim(); // Remove extra spaces
@@ -394,9 +396,7 @@ selectQueryOption.addEventListener("change", function () {
 function Update() {
   let barcodes = document.querySelector(".barcodeBox");
   let valueBarcodes = barcodes.value.trim(); // Remove extra spaces
-  let barcodesArray = valueBarcodes
-    .split(/\n/)
-    .map((barcode) => barcode.trim()); // Split and trim barcodes
+  let barcodesArray = valueBarcodes.split(/\n/).map((barcode) => barcode.trim()); // Split and trim barcodes
 
   let sku = document.querySelector(".skuBox");
   let valuesku = sku.value.trim(); // Remove extra spaces
@@ -405,9 +405,19 @@ function Update() {
   let skuHeading = document.querySelector("#skuedit");
   let barcodeHeading = document.querySelector("#barcodedit");
 
+  if (newColumnArray !== null) {
+    let newColumnValues = newColumnArray.value.trim(); // Remove extra spaces
+    var NewValuesArray = newColumnValues.split(/\n/).map((barcode) => barcode.trim()); // Split and trim barcodes
+  } else {
+    var NewValuesArray = [];
+  }
+
   // Ensure that empty lines are filtered out
   barcodesArray = barcodesArray.filter((barcode) => barcode !== "");
   skuArray = skuArray.filter((rate) => rate !== "");
+  NewValuesArray = NewValuesArray.filter((val) => val !== "");
+
+
 
   // Ensure tableName is provided
   let tableName = document.querySelector("#tableName");
@@ -417,15 +427,25 @@ function Update() {
   }
 
   // Create separate 'UPDATE' queries for each barcode-saleRate pair
-  let formattedQueries = barcodesArray.map((barcode, index) => {
+let formattedQueries;
+if (newColumnArray !== null) {
+   formattedQueries = barcodesArray.map((barcode, index) => {
+    return `UPDATE ${tableName.value} SET ${
+      skuHeading.childNodes[0].textContent || "sku"
+    } = ${skuArray[index]}, ${NewValuesArray[index]} WHERE ${
+      barcodeHeading.childNodes[0].textContent || "barcode"
+    } = '${barcode}';`;
+  });
+  
+} else {
+   formattedQueries = barcodesArray.map((barcode, index) => {
     return `UPDATE ${tableName.value} SET ${
       skuHeading.childNodes[0].textContent || "sku"
     } = ${skuArray[index]} WHERE ${
       barcodeHeading.childNodes[0].textContent || "barcode"
     } = '${barcode}';`;
   });
-
-  console.log(formattedQueries);
+}
 
   // Join all the queries with a newline character for output
   firstQuery = formattedQueries.join("\n");
