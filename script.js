@@ -177,6 +177,7 @@ selectQueryOption.addEventListener("change", function () {
         heading.contentEditable = "true";
         heading.style.textTransform = "none";
         heading.focus();
+
         // Function to handle click outside
         function handleClickOutside(event) {
           if (!heading.contains(event.target)) {
@@ -193,13 +194,18 @@ selectQueryOption.addEventListener("change", function () {
       });
     });
 
-    let AddFeildsBtn = document.querySelector("#addMoreInputBtn");
+    const AddFeildsBtn = document.querySelector("#addMoreInputBtn");
     const popup = document.querySelector(".popup");
+    const ColumnContainer = document.querySelector(".inputContainer2");
+    const addColumnBtn = document.querySelector("#addColumnBtn");
+    const columnNameInput = document.querySelector("#name");
+    const plusButton = document.querySelector(".addMoreInputDiv");
+    console.log(columnNameInput);
 
     // Update the position of the popup when the screen is resized
     function updateElementPosition() {
       const rect = AddFeildsBtn.getBoundingClientRect();
-      popup.style.top = `${rect.bottom + window.scrollY - 5}px`;
+      popup.style.top = `${rect.bottom + window.scrollY + 5}px`;
       popup.style.left = `${rect.left + window.scrollX + 10}px`;
     }
 
@@ -212,24 +218,28 @@ selectQueryOption.addEventListener("change", function () {
       }
     });
 
+    let AdditionalColumnAdded = false;
     // Show the popup when clicking the plus button
     AddFeildsBtn.addEventListener("click", (event) => {
-      popup.style.display = "flex";
-      updateElementPosition(); // Ensure the popup is positioned correctly
+      if (!AdditionalColumnAdded) {
+        popup.style.display = "flex";
+        updateElementPosition(); // Ensure the popup is positioned correctly
+      }
+      else{
+        alert("You can only add one column at a time");
+      }
     });
 
     // When New column is added
-    const ColumnContainer = document.querySelector(".inputContainer2");
-    const addColumnBtn = document.querySelector("#addColumnBtn");
-    const columnNameInput = document.querySelector("#name");
-    const plusButton = document.querySelector(".addMoreInputDiv");
-
     addColumnBtn.addEventListener("click", () => {
+      if (columnNameInput.value === "") {
+        return;
+      }
       let newColumn = document.createElement("div");
       newColumn.className = "inputGroup2";
       newColumn.innerHTML = `
       <div class="headingInputSection2">
-        <h2 id="${columnNameInput.value}">${columnNameInput.value}</h2>
+        <h2 contenteditable="true" id="${columnNameInput.value}">${columnNameInput.value}</h2>
       </div>
       <div class="inputsection2">
         <textarea class="newColumn" placeholder="Paste ${columnNameInput.value} here..." wrap="soft"></textarea>
@@ -238,7 +248,9 @@ selectQueryOption.addEventListener("change", function () {
       let newColumnElement = newColumn.querySelector(".newColumn");
       newColumnArray = newColumnElement;
       ColumnContainer.appendChild(newColumn);
-      ColumnContainer.insertBefore(newColumn, plusButton);     
+      ColumnContainer.insertBefore(newColumn, plusButton);
+      AdditionalColumnAdded = true;
+      popup.style.display = "none";
     });
 
     // Reassign event listener after the DOM update
@@ -396,7 +408,9 @@ selectQueryOption.addEventListener("change", function () {
 function Update() {
   let barcodes = document.querySelector(".barcodeBox");
   let valueBarcodes = barcodes.value.trim(); // Remove extra spaces
-  let barcodesArray = valueBarcodes.split(/\n/).map((barcode) => barcode.trim()); // Split and trim barcodes
+  let barcodesArray = valueBarcodes
+    .split(/\n/)
+    .map((barcode) => barcode.trim()); // Split and trim barcodes
 
   let sku = document.querySelector(".skuBox");
   let valuesku = sku.value.trim(); // Remove extra spaces
@@ -407,7 +421,9 @@ function Update() {
 
   if (newColumnArray !== null) {
     let newColumnValues = newColumnArray.value.trim(); // Remove extra spaces
-    var NewValuesArray = newColumnValues.split(/\n/).map((barcode) => barcode.trim()); // Split and trim barcodes
+    var NewValuesArray = newColumnValues
+      .split(/\n/)
+      .map((barcode) => barcode.trim()); // Split and trim barcodes
   } else {
     var NewValuesArray = [];
   }
@@ -417,8 +433,6 @@ function Update() {
   skuArray = skuArray.filter((rate) => rate !== "");
   NewValuesArray = NewValuesArray.filter((val) => val !== "");
 
-
-
   // Ensure tableName is provided
   let tableName = document.querySelector("#tableName");
   if (tableName.value.trim() === "") {
@@ -427,25 +441,24 @@ function Update() {
   }
 
   // Create separate 'UPDATE' queries for each barcode-saleRate pair
-let formattedQueries;
-if (newColumnArray !== null) {
-   formattedQueries = barcodesArray.map((barcode, index) => {
-    return `UPDATE ${tableName.value} SET ${
-      skuHeading.childNodes[0].textContent || "sku"
-    } = ${skuArray[index]}, ${NewValuesArray[index]} WHERE ${
-      barcodeHeading.childNodes[0].textContent || "barcode"
-    } = '${barcode}';`;
-  });
-  
-} else {
-   formattedQueries = barcodesArray.map((barcode, index) => {
-    return `UPDATE ${tableName.value} SET ${
-      skuHeading.childNodes[0].textContent || "sku"
-    } = ${skuArray[index]} WHERE ${
-      barcodeHeading.childNodes[0].textContent || "barcode"
-    } = '${barcode}';`;
-  });
-}
+  let formattedQueries;
+  if (newColumnArray !== null) {
+    formattedQueries = barcodesArray.map((barcode, index) => {
+      return `UPDATE ${tableName.value} SET ${
+        skuHeading.childNodes[0].textContent || "sku"
+      } = '${skuArray[index]}','${NewValuesArray[index]}' WHERE ${
+        barcodeHeading.childNodes[0].textContent || "barcode"
+      } = '${barcode}';`;
+    });
+  } else {
+    formattedQueries = barcodesArray.map((barcode, index) => {
+      return `UPDATE ${tableName.value} SET ${
+        skuHeading.childNodes[0].textContent || "sku"
+      } = '${skuArray[index]}' WHERE ${
+        barcodeHeading.childNodes[0].textContent || "barcode"
+      } = '${barcode}';`;
+    });
+  }
 
   // Join all the queries with a newline character for output
   firstQuery = formattedQueries.join("\n");
